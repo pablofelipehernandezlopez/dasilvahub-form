@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="page_title">Aplicar — Da Silva Consulting & Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #16325c;
+      --navy-deep: #0e2240;
+      --orange: #ed8936;
+      --orange-deep: #d97706;
+      --ink: #1a202c;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f4f6fa;
+      --card: #ffffff;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.06), 0 2px 4px -2px rgba(15,23,42,0.04);
+      --shadow-lg: 0 25px 50px -12px rgba(15,23,42,0.12), 0 10px 20px -8px rgba(15,23,42,0.08);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---------- Top bar (Home-style header) ---------- */
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar img.logo {
+      height: 56px;
+      width: auto;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .topbar .help {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .topbar .help a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ---------- Language toggle (slide switch) ---------- */
+    .lang-toggle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 0;
+      user-select: none;
+    }
+    .lang-toggle .slider {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: 3px;
+      width: calc(50% - 3px);
+      background: var(--navy);
+      border-radius: 999px;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.18);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+    .lang-toggle.en .slider {
+      transform: translateX(100%);
+    }
+    .lang-btn {
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      border: 0;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 999px;
+      transition: color 0.2s ease;
+    }
+    .lang-toggle.es .lang-btn[data-lang="es"],
+    .lang-toggle.en .lang-btn[data-lang="en"] {
+      color: #fff;
+    }
+    .lang-btn .flag {
+      margin-right: 4px;
+      font-size: 13px;
+    }
+
+    /* ---------- Page layout: card fills the rest of the viewport ---------- */
+    .page {
+      padding: 0;
+      min-height: calc(100vh - 86px);
+      display: flex;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      background: var(--card);
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+      flex: 1;
+      width: 100%;
+      min-height: calc(100vh - 86px);
+    }
+
+    /* ---------- Left panel: vertical stepper ---------- */
+    .side {
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+      color: #fff;
+      padding: 48px 36px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .side::after {
+      content: "";
+      position: absolute;
+      left: -20px;
+      right: -20px;
+      bottom: -30px;
+      height: 140px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(ellipse at 30% 100%, rgba(237,137,54,0.18) 0%, rgba(237,137,54,0) 55%),
+        radial-gradient(ellipse at 70% 100%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 55%);
+      clip-path: polygon(0 60%, 25% 30%, 45% 55%, 65% 20%, 100% 50%, 100% 100%, 0 100%);
+      z-index: 0;
+    }
+    .side-inner { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+
+    .vstep {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 14px 0;
+      position: relative;
+    }
+    .vstep + .vstep::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: -10px;
+      width: 2px;
+      height: 24px;
+      background-image: linear-gradient(to bottom, rgba(255,255,255,0.35) 50%, transparent 50%);
+      background-size: 2px 6px;
+      background-repeat: repeat-y;
+    }
+    .vstep .vbubble {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
+      background: transparent;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+    .vstep .vbubble svg { width: 14px; height: 14px; display: none; }
+    .vstep .vlabel {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.4;
+      padding-top: 4px;
+      transition: color 0.25s ease, font-weight 0.25s ease;
+    }
+    .vstep.active .vbubble {
+      border-color: #fff;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.15);
+    }
+    .vstep.active .vlabel { color: #fff; font-weight: 700; font-size: 17px; }
+    .vstep.completed .vbubble { background: var(--orange); border-color: var(--orange); }
+    .vstep.completed .vbubble svg { display: block; stroke: #fff; }
+    .vstep.completed .vlabel { color: rgba(255,255,255,0.85); }
+
+    .side-footer {
+      margin-top: auto;
+      padding-top: 32px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      font-weight: 600;
+      text-align: center;
+    }
+    .side-footer strong { color: rgba(255,255,255,0.85); font-weight: 700; }
+
+    /* ---------- Right panel: form ---------- */
+    .main {
+      padding: 40px 56px;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+    }
+    .hero {
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--navy-deep);
+      margin: 0 0 6px;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+      flex: 1;
+      flex-direction: column;
+    }
+    .panel.active { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .panel h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy-deep);
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .panel .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 24px;
+      line-height: 1.6;
+    }
+    .panel-body { flex: 1; }
+
+    /* ---------- Form fields ---------- */
+    .field { margin-bottom: 18px; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field-row-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 16px;
+    }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .field label .req { color: var(--orange-deep); margin-left: 2px; }
+    .field input[type="text"],
+    .field input[type="email"],
+    .field input[type="tel"],
+    .field input[type="url"],
+    .field input[type="number"],
+    .field input[type="date"],
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(22, 50, 92, 0.12);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: #9ca3af; }
+    .field textarea { resize: vertical; min-height: 88px; }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .hint a { color: var(--navy); font-weight: 600; text-decoration: none; }
+
+    .field .error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--orange-deep);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    .field.has-error input,
+    .field.has-error select,
+    .field.has-error textarea {
+      border-color: var(--orange-deep);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.10);
+    }
+    .field.has-error .error-msg { display: block; }
+
+    /* ---------- Radio chips & checkboxes ---------- */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip { position: relative; }
+    .chip input[type="radio"],
+    .chip input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .chip span {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip:hover span { border-color: var(--navy); color: var(--navy); }
+    .chip input:checked + span {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+    }
+    .checkbox-row input[type="checkbox"] {
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+    .checkbox-row label {
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.5;
+      cursor: pointer;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    /* ---------- Footer / nav ---------- */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    button {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: transform 0.05s, box-shadow 0.15s, background 0.15s, color 0.15s;
+    }
+    button:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+      border: 0;
+      padding: 12px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover { background: var(--navy-deep); box-shadow: var(--shadow-md); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--line);
+      padding: 11px 26px;
+    }
+    .btn-secondary:hover { border-color: var(--navy); background: rgba(22,50,92,0.04); }
+    .btn-submit {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+      color: #fff;
+      border: 0;
+      padding: 12px 32px;
+      box-shadow: 0 2px 8px rgba(237,137,54,0.3);
+    }
+    .btn-submit:hover { box-shadow: 0 4px 14px rgba(237,137,54,0.45); }
+    .ghost-spacer { visibility: hidden; }
+
+    .legal-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+
+    /* ---------- File upload (Documentos) ---------- */
+    .dropzone {
+      border: 2px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dropzone:hover { border-color: var(--navy); background: rgba(22,50,92,0.03); }
+    .dropzone.dragover {
+      border-color: var(--orange);
+      background: rgba(237,137,54,0.08);
+      transform: scale(1.01);
+    }
+    .dropzone .dz-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      color: var(--navy);
+    }
+    .dropzone .dz-icon svg { width: 100%; height: 100%; }
+    .dropzone .dz-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .dropzone .dz-title strong { color: var(--navy); }
+    .dropzone .dz-hint {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dropzone input[type="file"] { display: none; }
+
+    .file-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+    }
+    .file-item .file-ico {
+      width: 36px;
+      height: 36px;
+      background: rgba(220, 38, 38, 0.08);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dc2626;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .file-item .file-meta { flex: 1; min-width: 0; }
+    .file-item .file-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-item .file-size { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .file-item .file-remove {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .file-item .file-remove:hover { background: #fee2e2; color: #b91c1c; }
+    .file-item .file-remove svg { width: 16px; height: 16px; display: block; }
+
+    .file-error {
+      font-size: 12px;
+      color: var(--orange-deep);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* Document slots (3 cols → 2 → 1 según ancho disponible) */
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+    .doc-slot {
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+    .doc-slot:hover { border-color: rgba(22,50,92,0.25); }
+    .doc-slot-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .doc-slot-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .doc-slot-info { width: 100%; }
+    .doc-slot-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .doc-slot-hint {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .doc-template-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(22,50,92,0.06);
+      color: var(--navy);
+      border: 1px solid rgba(22,50,92,0.18);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      margin-top: 4px;
+    }
+    .doc-template-btn:hover {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+    .doc-template-btn svg { width: 12px; height: 12px; }
+    .doc-slot .dropzone {
+      padding: 14px 10px;
+      margin-top: auto;
+    }
+    .doc-slot .dz-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-align: center;
+    }
+    .doc-slot .dz-mini {
+      width: 24px;
+      height: 24px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .doc-slot .dz-mini-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .doc-slot .dz-mini-title strong { color: var(--navy); }
+    .doc-slot .dz-mini-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .doc-slot .file-item { padding: 8px 10px; gap: 8px; }
+    .doc-slot .file-item .file-ico { width: 28px; height: 28px; font-size: 9px; }
+    .doc-slot .file-item .file-name { font-size: 12px; }
+    .doc-slot .file-item .file-size { font-size: 10px; }
+    @media (max-width: 880px) {
+      .doc-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Rejection screen ---------- */
+    .reject-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex: 1;
+      padding: 40px 20px;
+    }
+    .reject-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .reject-icon svg { width: 40px; height: 40px; stroke: #b91c1c; }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .success-icon svg { width: 40px; height: 40px; stroke: #065f46; }
+    .reject-screen h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--navy-deep);
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+    .reject-screen p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin: 0 0 28px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 880px) {
+      .topbar { padding: 12px 18px; flex-wrap: wrap; gap: 8px; }
+      .topbar img.logo { height: 42px; }
+      .topbar-right { gap: 12px; }
+      .page { padding: 0; min-height: auto; }
+      .card { grid-template-columns: 1fr; min-height: auto; }
+      .side { padding: 24px 24px 28px; }
+      .side::after { display: none; }
+      .side-brand { margin-bottom: 20px; }
+      .vsteps { display: flex; justify-content: space-between; gap: 4px; overflow-x: auto; }
+      .vstep { flex-direction: column; align-items: center; gap: 6px; padding: 0; flex: 1 0 auto; text-align: center; min-width: 60px; }
+      .vstep + .vstep::before { display: none; }
+      .vstep .vlabel { font-size: 11px; padding-top: 0; }
+      .main { padding: 28px 20px; }
+      .field-row, .field-row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <img src="assets/dasilva-logo.png" alt="Da Silva Consulting & Services" class="logo">
+    <div class="topbar-right">
+      <div class="lang-toggle es" role="group" aria-label="Language / Idioma">
+        <span class="slider" aria-hidden="true"></span>
+        <button type="button" class="lang-btn" data-lang="es"><span class="flag">🇪🇸</span>ES</button>
+        <button type="button" class="lang-btn" data-lang="en"><span class="flag">🇺🇸</span>EN</button>
+      </div>
+      <div class="help">
+        <span data-i18n="help_label">¿Necesitas ayuda?</span>
+        <a href="mailto:info@dasilvaconsultingservices.net">info@dasilvaconsultingservices.net</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="card">
+      <!-- LEFT: vertical stepper -->
+      <aside class="side">
+        <div class="side-inner">
+          <div class="vsteps">
+            <div class="vstep active" data-step="1">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step1_title">Información Personal</div>
+            </div>
+            <div class="vstep" data-step="2">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step2_title">Información Laboral</div>
+            </div>
+            <div class="vstep" data-step="3">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step3_title">Elegibilidad</div>
+            </div>
+            <div class="vstep" data-step="4">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step4_title">Capacidades</div>
+            </div>
+            <div class="vstep" data-step="5">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step5_title">Referencia</div>
+            </div>
+            <div class="vstep" data-step="6">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step6_title">Documentos</div>
+            </div>
+            <div class="vstep" data-step="7">
+              <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <div class="vlabel" data-i18n="step7_title">Confirmación</div>
+            </div>
+          </div>
+          <div class="side-footer">Powered by <strong>Aurora Digital</strong>&reg;</div>
+        </div>
+      </aside>
+
+      <!-- RIGHT: form -->
+      <section class="main">
+        <div class="hero">
+          <h1 data-i18n="hero_title">Aplica a nuestros empleos</h1>
+          <p data-i18n="hero_subtitle">Cuéntanos sobre ti — completa los pasos a continuación. Toma alrededor de 5 minutos.</p>
+        </div>
+
+        <form id="applyForm" enctype="multipart/form-data" novalidate style="display:flex; flex-direction:column; flex:1;">
+          <input type="hidden" name="oid" value="00Da500001XYODrEAP">
+          <input type="hidden" name="retURL" value="https://www.dasilvaconsultingservices.net/thanks">
+          <input type="hidden" id="00Na500001oUa3y" name="00Na500001oUa3y" value="Applicant">
+          <input type="hidden" id="company" name="company" value="Applicant">
+          <input type="hidden" name="country" value="United States">
+
+          <!-- Step 1: Personal Info -->
+          <div class="panel active" data-panel="1">
+            <div class="panel-body">
+              <h2 data-i18n="step1_title">Información Personal</h2>
+              <p class="subtitle" data-i18n="step1_subtitle">Datos básicos para identificarte y contactarte.</p>
+
+              <div class="field-row">
+                <div class="field" data-validate="name">
+                  <label for="first_name" data-i18n="lbl_first_name">Nombres <span class="req">*</span></label>
+                  <input type="text" id="first_name" name="first_name" maxlength="40" autocomplete="given-name" required>
+                  <div class="error-msg" data-i18n="err_name">Solo letras, no se permiten números.</div>
+                </div>
+                <div class="field" data-validate="name">
+                  <label for="last_name" data-i18n="lbl_last_name">Apellidos <span class="req">*</span></label>
+                  <input type="text" id="last_name" name="last_name" maxlength="80" autocomplete="family-name" required>
+                  <div class="error-msg" data-i18n="err_name">Solo letras, no se permiten números.</div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="dob" data-i18n="lbl_dob">Fecha de nacimiento <span class="req">*</span></label>
+                  <input type="date" id="dob" name="dob" required>
+                </div>
+                <div class="field">
+                  <label data-i18n="lbl_gender">Género</label>
+                  <div class="chips">
+                    <label class="chip"><input type="radio" name="gender" value="Masculino"><span data-i18n="opt_male">Masculino</span></label>
+                    <label class="chip"><input type="radio" name="gender" value="Femenino"><span data-i18n="opt_female">Femenino</span></label>
+                    <label class="chip"><input type="radio" name="gender" value="Prefiero no decirlo"><span data-i18n="opt_no_say">Prefiero no decirlo</span></label>
+                    <label class="chip"><input type="radio" name="gender" value="Otro"><span data-i18n="opt_other">Otro</span></label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field" data-validate="phone">
+                  <label for="phone" data-i18n="lbl_phone">Teléfono <span class="req">*</span></label>
+                  <input type="tel" id="phone" name="phone" maxlength="40" autocomplete="tel" placeholder="5551234567">
+                  <div class="error-msg" data-i18n="err_phone">Solo números. Ingrese un teléfono válido (7 a 15 dígitos).</div>
+                </div>
+                <div class="field" data-validate="email">
+                  <label for="email" data-i18n="lbl_email">Email <span class="req">*</span></label>
+                  <input type="email" id="email" name="email" maxlength="80" autocomplete="email" placeholder="tu@ejemplo.com" data-i18n-placeholder="ph_email">
+                  <div class="error-msg" data-i18n="err_email">Ingrese un correo electrónico válido.</div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="street" data-i18n="lbl_street">Dirección <span class="req">*</span></label>
+                <input type="text" id="street" name="street" maxlength="120" autocomplete="street-address" placeholder="123 Main St, Apt 4B">
+              </div>
+
+              <div class="field-row-3">
+                <div class="field">
+                  <label for="state" data-i18n="lbl_state">Estado <span class="req">*</span></label>
+                  <select id="state" name="state" autocomplete="address-level1">
+                    <option value="" data-i18n="opt_select_state">— Selecciona un estado —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="city" data-i18n="lbl_city">Ciudad <span class="req">*</span></label>
+                  <select id="city" name="city" autocomplete="address-level2" disabled>
+                    <option value="" data-i18n="opt_select_city_first">— Selecciona primero un estado —</option>
+                  </select>
+                </div>
+                <div class="field" data-validate="zip">
+                  <label for="zip" data-i18n="lbl_zip">ZIP Code <span class="req">*</span></label>
+                  <input type="text" id="zip" name="zip" maxlength="5" inputmode="numeric" autocomplete="postal-code" placeholder="12345">
+                  <div class="error-msg" data-i18n="err_zip">Ingrese un ZIP válido de 5 dígitos.</div>
+                </div>
+              </div>
+            </div>
+            <div class="actions">
+              <span class="ghost-spacer"></span>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Job Info -->
+          <div class="panel" data-panel="2">
+            <div class="panel-body">
+              <h2 data-i18n="step2_title">Información Laboral</h2>
+              <p class="subtitle" data-i18n="step2_subtitle">Sobre tu situación laboral actual y el puesto al que aplicas.</p>
+
+              <div class="field">
+                <label for="current_occupation" data-i18n="lbl_current_occupation">Ocupación actual</label>
+                <input type="text" id="current_occupation" name="current_occupation" maxlength="80" placeholder="Ej. Customer Service Representative" data-i18n-placeholder="ph_current_occupation">
+              </div>
+
+              <div class="field">
+                <label for="00Na500001oUa3x" data-i18n="lbl_position">Puesto solicitado <span class="req">*</span></label>
+                <select id="00Na500001oUa3x" name="00Na500001oUa3x">
+                  <option value="" data-i18n="opt_select_position">— Selecciona un puesto —</option>
+                  <option value="01ta500000C9naTAAR">Customer Service Agent · JOB-2026-Q2-001</option>
+                  <option value="01ta500000C9nc5AAB">Automotive Technician · JOB-2026-Q2-002</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label data-i18n="lbl_availability">Disponibilidad <span class="req">*</span></label>
+                <div class="chips">
+                  <label class="chip"><input type="radio" name="availability" value="Tiempo completo"><span data-i18n="opt_full_time">Tiempo completo</span></label>
+                  <label class="chip"><input type="radio" name="availability" value="Medio tiempo"><span data-i18n="opt_part_time">Medio tiempo</span></label>
+                  <label class="chip"><input type="radio" name="availability" value="Fines de semana"><span data-i18n="opt_weekends">Fines de semana</span></label>
+                  <label class="chip"><input type="radio" name="availability" value="Turnos rotativos"><span data-i18n="opt_rotating">Turnos rotativos</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Eligibility -->
+          <div class="panel" data-panel="3">
+            <div class="panel-body">
+              <h2 data-i18n="step3_title">Elegibilidad</h2>
+              <p class="subtitle" data-i18n="step3_subtitle">Información requerida para confirmar que cumples con los requisitos legales.</p>
+
+              <div class="field">
+                <label data-i18n="lbl_us_work">¿Autorizado para trabajar en EE.UU.? <span class="req">*</span></label>
+                <div class="chips">
+                  <label class="chip"><input type="radio" name="us_work_auth" value="Sí"><span data-i18n="opt_yes">Sí</span></label>
+                  <label class="chip"><input type="radio" name="us_work_auth" value="No"><span data-i18n="opt_no">No</span></label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label data-i18n="lbl_english">Nivel de inglés <span class="req">*</span></label>
+                <div class="chips">
+                  <label class="chip"><input type="radio" name="english_level" value="Básico"><span data-i18n="opt_basic">Básico</span></label>
+                  <label class="chip"><input type="radio" name="english_level" value="Intermedio"><span data-i18n="opt_intermediate">Intermedio</span></label>
+                  <label class="chip"><input type="radio" name="english_level" value="Avanzado"><span data-i18n="opt_advanced">Avanzado</span></label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label data-i18n="lbl_other_lang">¿Habla otro idioma? (selección múltiple)</label>
+                <div class="chips" id="languages_chips">
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Mandarín"><span data-i18n="lang_zh">Mandarín</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Hindi"><span data-i18n="lang_hi">Hindi</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Español"><span data-i18n="lang_es">Español</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Árabe"><span data-i18n="lang_ar">Árabe</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Bengalí"><span data-i18n="lang_bn">Bengalí</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Portugués"><span data-i18n="lang_pt">Portugués</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Ruso"><span data-i18n="lang_ru">Ruso</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Japonés"><span data-i18n="lang_ja">Japonés</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Punyabí"><span data-i18n="lang_pa">Punyabí</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Alemán"><span data-i18n="lang_de">Alemán</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Javanés"><span data-i18n="lang_jv">Javanés</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Coreano"><span data-i18n="lang_ko">Coreano</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Francés"><span data-i18n="lang_fr">Francés</span></label>
+                  <label class="chip"><input type="checkbox" name="other_languages" value="Italiano"><span data-i18n="lang_it">Italiano</span></label>
+                  <label class="chip"><input type="checkbox" id="lang_other_chk" name="other_languages" value="Otro"><span data-i18n="opt_other">Otro</span></label>
+                </div>
+                <input type="text" id="other_language_text" name="other_language_text" maxlength="80" placeholder="Especifica el idioma" data-i18n-placeholder="ph_other_lang_specify" style="display:none; margin-top:10px;">
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Abilities -->
+          <div class="panel" data-panel="4">
+            <div class="panel-body">
+              <h2 data-i18n="step4_title">Capacidades</h2>
+              <p class="subtitle" data-i18n="step4_subtitle">Algunas preguntas físicas relacionadas con el puesto.</p>
+
+              <div class="field">
+                <label data-i18n="lbl_lift">¿Puede cargar 15 lb? <span class="req">*</span></label>
+                <div class="chips">
+                  <label class="chip"><input type="radio" name="lift_15lb" value="Sí"><span data-i18n="opt_yes">Sí</span></label>
+                  <label class="chip"><input type="radio" name="lift_15lb" value="No"><span data-i18n="opt_no">No</span></label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label data-i18n="lbl_cold">¿Puede trabajar en frío? <span class="req">*</span></label>
+                <div class="chips">
+                  <label class="chip"><input type="radio" name="cold_work" value="Sí"><span data-i18n="opt_yes">Sí</span></label>
+                  <label class="chip"><input type="radio" name="cold_work" value="No"><span data-i18n="opt_no">No</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Reference -->
+          <div class="panel" data-panel="5">
+            <div class="panel-body">
+              <h2 data-i18n="step5_title">Referencia</h2>
+              <p class="subtitle" data-i18n="step5_subtitle">Una persona a quien podamos contactar para verificar referencias.</p>
+
+              <div class="field-row">
+                <div class="field" data-validate="name">
+                  <label for="reference_name" data-i18n="lbl_ref_name">Nombre referencia <span class="req">*</span></label>
+                  <input type="text" id="reference_name" name="reference_name" maxlength="80" placeholder="Nombre completo" data-i18n-placeholder="ph_full_name">
+                  <div class="error-msg" data-i18n="err_name">Solo letras, no se permiten números.</div>
+                </div>
+                <div class="field" data-validate="phone">
+                  <label for="reference_phone" data-i18n="lbl_ref_phone">Teléfono referencia <span class="req">*</span></label>
+                  <input type="tel" id="reference_phone" name="reference_phone" maxlength="40" placeholder="5551234567">
+                  <div class="error-msg" data-i18n="err_phone">Solo números. Ingrese un teléfono válido (7 a 15 dígitos).</div>
+                </div>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 6: Documents -->
+          <div class="panel" data-panel="6">
+            <div class="panel-body">
+              <h2 data-i18n="step6_title">Documentos</h2>
+              <p class="subtitle" data-i18n="step6_subtitle">Carga los siguientes documentos en formato PDF (máx. 10 MB cada uno).</p>
+
+              <div class="doc-grid">
+              <!-- Document slot 1: Identification -->
+              <div class="doc-slot" data-slot="document_id">
+                <div class="doc-slot-head">
+                  <div class="doc-slot-num">1</div>
+                  <div class="doc-slot-info">
+                    <div class="doc-slot-name" data-i18n="doc_id">Identificación</div>
+                    <div class="doc-slot-hint" data-i18n="doc_id_hint">ID emitido por el gobierno: licencia de conducir, pasaporte o ID estatal.</div>
+                  </div>
+                </div>
+                <div class="dropzone" data-dz-target="document_id" tabindex="0" role="button" aria-label="Cargar identificación">
+                  <div class="dz-row">
+                    <svg class="dz-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div>
+                      <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                    </div>
+                  </div>
+                  <input type="file" name="document_id" accept="application/pdf,.pdf" data-dz-input="document_id">
+                </div>
+                <div class="file-list" data-dz-list="document_id"></div>
+                <div class="file-error" data-dz-error="document_id" style="display:none;"></div>
+              </div>
+
+              <!-- Document slot 2: Employee Application (with template) -->
+              <div class="doc-slot" data-slot="document_application">
+                <div class="doc-slot-head">
+                  <div class="doc-slot-num">2</div>
+                  <div class="doc-slot-info">
+                    <div class="doc-slot-name" data-i18n="doc_application">Solicitud de Empleo</div>
+                    <div class="doc-slot-hint" data-i18n="doc_application_hint">Descarga la plantilla, complétala, fírmala y súbela en PDF.</div>
+                  </div>
+                  <a class="doc-template-btn" href="assets/templates/Da-Silva-Employee-Application.pdf" target="_blank" rel="noopener" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span data-i18n="btn_download_template">Descargar plantilla</span>
+                  </a>
+                </div>
+                <div class="dropzone" data-dz-target="document_application" tabindex="0" role="button" aria-label="Cargar solicitud de empleo">
+                  <div class="dz-row">
+                    <svg class="dz-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div>
+                      <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                    </div>
+                  </div>
+                  <input type="file" name="document_application" accept="application/pdf,.pdf" data-dz-input="document_application">
+                </div>
+                <div class="file-list" data-dz-list="document_application"></div>
+                <div class="file-error" data-dz-error="document_application" style="display:none;"></div>
+              </div>
+
+              <!-- Document slot 3: New Employee Package (with template) -->
+              <div class="doc-slot" data-slot="document_package">
+                <div class="doc-slot-head">
+                  <div class="doc-slot-num">3</div>
+                  <div class="doc-slot-info">
+                    <div class="doc-slot-name" data-i18n="doc_package">Paquete de Nuevo Empleado</div>
+                    <div class="doc-slot-hint" data-i18n="doc_package_hint">Descarga el paquete, complétalo y súbelo en PDF.</div>
+                  </div>
+                  <a class="doc-template-btn" href="assets/templates/Da-Silva-Paquete-Nuevo-Empleado.pdf" target="_blank" rel="noopener" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span data-i18n="btn_download_template">Descargar plantilla</span>
+                  </a>
+                </div>
+                <div class="dropzone" data-dz-target="document_package" tabindex="0" role="button" aria-label="Cargar paquete de nuevo empleado">
+                  <div class="dz-row">
+                    <svg class="dz-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div>
+                      <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                    </div>
+                  </div>
+                  <input type="file" name="document_package" accept="application/pdf,.pdf" data-dz-input="document_package">
+                </div>
+                <div class="file-list" data-dz-list="document_package"></div>
+                <div class="file-error" data-dz-error="document_package" style="display:none;"></div>
+              </div>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Step 7: Confirmation -->
+          <div class="panel" data-panel="7">
+            <div class="panel-body">
+              <h2 data-i18n="step7_title">Confirmación</h2>
+              <p class="subtitle" data-i18n="step7_subtitle">Revisa, certifica y firma tu aplicación.</p>
+
+              <div class="field">
+                <div class="checkbox-row">
+                  <input type="checkbox" id="cert_truth" name="cert_truth" value="Sí">
+                  <label for="cert_truth" data-i18n="lbl_cert">Certifico que la información proporcionada es verdadera y precisa al mejor de mi conocimiento.</label>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="signature" data-i18n="lbl_signature">Nombre completo (firma) <span class="req">*</span></label>
+                  <input type="text" id="signature" name="signature" maxlength="120" placeholder="Tu nombre completo" data-i18n-placeholder="ph_signature" style="font-family: 'Brush Script MT', cursive; font-size: 18px; font-style: italic;">
+                </div>
+                <div class="field">
+                  <label for="signature_date" data-i18n="lbl_date">Fecha <span class="req">*</span></label>
+                  <input type="date" id="signature_date" name="signature_date" readonly tabindex="-1" style="background:var(--bg); color:var(--muted); cursor:not-allowed;">
+                </div>
+              </div>
+
+              <p class="legal-note" data-i18n="legal_html">Al enviar, aceptas la <a href="#" style="color:var(--navy);font-weight:600;text-decoration:none;">Política de Privacidad</a> de Da Silva y consientes ser contactado sobre vacantes abiertas.</p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
+              <button type="submit" class="btn-submit" data-i18n="btn_submit">Enviar aplicación</button>
+            </div>
+          </div>
+
+          <!-- Rejection panel: shown only if user selects "No" on US work authorization -->
+          <div class="panel" data-panel="reject">
+            <div class="panel-body">
+              <div class="reject-screen">
+                <div class="reject-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                </div>
+                <h2 data-i18n="reject_title">Lo sentimos, no podemos continuar</h2>
+                <p data-i18n="reject_message">Para los puestos disponibles en este momento se requiere autorización legal para trabajar en los Estados Unidos. Te agradecemos tu interés en Da Silva Consulting &amp; Services.</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn-secondary" data-reject-back data-i18n="btn_back">Atrás</button>
+            </div>
+          </div>
+
+          <!-- Success panel -->
+          <div class="panel" data-panel="success">
+            <div class="panel-body">
+              <div class="reject-screen">
+                <div class="success-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+                <h2 data-i18n="success_title">¡Aplicación enviada con éxito!</h2>
+                <p data-i18n="success_message">Hemos recibido tu información y documentos. Nuestro equipo de talento revisará tu aplicación y te contactará pronto.</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // ============================================================
+    // Configuración de integración
+    // ============================================================
+    // Reemplaza con tu webhook de Make.com:
+    // 1) En Make: crea un escenario nuevo → módulo "Custom webhook"
+    // 2) Copia la URL "https://hook.us1.make.com/xxxxxxx" y pégala aquí
+    const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/djx51jesj8w6tt8xvu3n4k2qt37mr5tu";
+
+    // ============================================================
+    // i18n dictionary
+    // ============================================================
+    const i18n = {
+      es: {
+        page_title: "Aplicar — Da Silva Consulting & Services",
+        help_label: "¿Necesitas ayuda?",
+
+        step1_title: "Información Personal",
+        step2_title: "Información Laboral",
+        step3_title: "Elegibilidad",
+        step4_title: "Capacidades",
+        step5_title: "Referencia",
+        step6_title: "Documentos",
+        step7_title: "Confirmación",
+
+        hero_title: "Aplica a nuestros empleos",
+        hero_subtitle: "Cuéntanos sobre ti — completa los pasos a continuación. Toma alrededor de 5 minutos.",
+
+        step1_subtitle: "Datos básicos para identificarte y contactarte.",
+        step2_subtitle: "Sobre tu situación laboral actual y el puesto al que aplicas.",
+        step3_subtitle: "Información requerida para confirmar que cumples con los requisitos legales.",
+        step4_subtitle: "Algunas preguntas físicas relacionadas con el puesto.",
+        step5_subtitle: "Una persona a quien podamos contactar para verificar referencias.",
+        step6_subtitle: "Carga los siguientes documentos en formato PDF (máx. 5 MB cada uno).",
+        step7_subtitle: "Revisa, certifica y firma tu aplicación.",
+
+        doc_id: "Identificación",
+        doc_id_hint: "ID emitido por el gobierno: licencia de conducir, pasaporte o ID estatal.",
+        doc_application: "Solicitud de Empleo",
+        doc_application_hint: "Descarga la plantilla, complétala, fírmala y súbela en PDF.",
+        doc_package: "Paquete de Nuevo Empleado",
+        doc_package_hint: "Descarga el paquete, complétalo y súbelo en PDF.",
+        btn_download_template: "Descargar plantilla",
+        dz_mini_title: 'Arrastra el PDF o <strong>haz clic para seleccionar</strong>',
+        dz_mini_hint: "Solo PDF · máximo 5 MB",
+        err_file_type: "Solo se permiten archivos PDF.",
+        err_file_size: "El archivo supera el tamaño máximo de 5 MB.",
+
+        lbl_first_name: 'Nombres <span class="req">*</span>',
+        lbl_last_name: 'Apellidos <span class="req">*</span>',
+        lbl_dob: 'Fecha de nacimiento <span class="req">*</span>',
+        lbl_gender: "Género",
+        lbl_phone: 'Teléfono <span class="req">*</span>',
+        lbl_email: 'Email <span class="req">*</span>',
+        lbl_street: 'Dirección <span class="req">*</span>',
+        lbl_city: 'Ciudad <span class="req">*</span>',
+        lbl_state: 'Estado <span class="req">*</span>',
+        lbl_zip: 'ZIP Code <span class="req">*</span>',
+
+        lbl_current_occupation: "Ocupación actual",
+        lbl_position: 'Puesto solicitado <span class="req">*</span>',
+        lbl_availability: 'Disponibilidad <span class="req">*</span>',
+
+        lbl_us_work: '¿Autorizado para trabajar en EE.UU.? <span class="req">*</span>',
+        lbl_english: 'Nivel de inglés <span class="req">*</span>',
+        lbl_other_lang: "¿Habla otro idioma? (selección múltiple)",
+        lang_en: "Inglés",
+        lang_zh: "Mandarín",
+        lang_hi: "Hindi",
+        lang_es: "Español",
+        lang_ar: "Árabe",
+        lang_bn: "Bengalí",
+        lang_pt: "Portugués",
+        lang_ru: "Ruso",
+        lang_ja: "Japonés",
+        lang_pa: "Punyabí",
+        lang_de: "Alemán",
+        lang_jv: "Javanés",
+        lang_ko: "Coreano",
+        lang_fr: "Francés",
+        lang_it: "Italiano",
+        ph_other_lang_specify: "Especifica el idioma",
+
+        lbl_lift: '¿Puede cargar 15 lb? <span class="req">*</span>',
+        lbl_cold: '¿Puede trabajar en frío? <span class="req">*</span>',
+
+        lbl_ref_name: 'Nombre referencia <span class="req">*</span>',
+        lbl_ref_phone: 'Teléfono referencia <span class="req">*</span>',
+
+        lbl_cert: "Certifico que la información proporcionada es verdadera y precisa al mejor de mi conocimiento.",
+        lbl_signature: 'Nombre completo (firma) <span class="req">*</span>',
+        lbl_date: 'Fecha <span class="req">*</span>',
+        legal_html: 'Al enviar, aceptas la <a href="#" style="color:var(--navy);font-weight:600;text-decoration:none;">Política de Privacidad</a> de Da Silva y consientes ser contactado sobre vacantes abiertas.',
+
+        opt_male: "Masculino",
+        opt_female: "Femenino",
+        opt_no_say: "Prefiero no decirlo",
+        opt_other: "Otro",
+        opt_full_time: "Tiempo completo",
+        opt_part_time: "Medio tiempo",
+        opt_weekends: "Fines de semana",
+        opt_rotating: "Turnos rotativos",
+        opt_yes: "Sí",
+        opt_no: "No",
+        opt_basic: "Básico",
+        opt_intermediate: "Intermedio",
+        opt_advanced: "Avanzado",
+        opt_select_position: "— Selecciona un puesto —",
+        opt_select_state: "— Selecciona un estado —",
+        opt_select_city: "— Selecciona una ciudad —",
+        opt_select_city_first: "— Selecciona primero un estado —",
+
+        ph_email: "tu@ejemplo.com",
+        ph_current_occupation: "Ej. Customer Service Representative",
+        ph_other_lang: "Ej. Portugués, Francés…",
+        ph_full_name: "Nombre completo",
+        ph_signature: "Tu nombre completo",
+
+        btn_continue: "Continuar",
+        btn_back: "Atrás",
+        btn_submit: "Enviar aplicación",
+
+        err_name: "Solo letras, no se permiten números.",
+        err_email: "Ingrese un correo electrónico válido.",
+        err_phone: "Solo números. Ingrese un teléfono válido (7 a 15 dígitos).",
+        err_zip: "Ingrese un ZIP válido de 5 dígitos.",
+
+        reject_title: "Lo sentimos, no podemos continuar",
+        reject_message: "Para los puestos disponibles en este momento se requiere autorización legal para trabajar en los Estados Unidos. Te agradecemos tu interés en Da Silva Consulting & Services.",
+
+        success_title: "¡Aplicación enviada con éxito!",
+        success_message: "Hemos recibido tu información y documentos. Nuestro equipo de talento revisará tu aplicación y te contactará pronto.",
+        btn_submitting: "Enviando…",
+        err_submit: "No se pudo enviar la aplicación. Por favor intenta de nuevo."
+      },
+      en: {
+        page_title: "Apply — Da Silva Consulting & Services",
+        help_label: "Need help?",
+
+        step1_title: "Personal Info",
+        step2_title: "Job Information",
+        step3_title: "Eligibility",
+        step4_title: "Abilities",
+        step5_title: "Reference",
+        step6_title: "Documents",
+        step7_title: "Confirmation",
+
+        hero_title: "Apply to our open jobs",
+        hero_subtitle: "Tell us about yourself — complete the steps below. Takes about 5 minutes.",
+
+        step1_subtitle: "Basic information so we can identify and contact you.",
+        step2_subtitle: "About your current work situation and the position you're applying for.",
+        step3_subtitle: "Required information to confirm you meet legal requirements.",
+        step4_subtitle: "A few physical questions related to the position.",
+        step5_subtitle: "A person we can contact to verify references.",
+        step6_subtitle: "Upload the following documents in PDF format (max 5 MB each).",
+        step7_subtitle: "Review, certify and sign your application.",
+
+        doc_id: "Identification",
+        doc_id_hint: "Government-issued ID: driver's license, passport or state ID.",
+        doc_application: "Employee Application",
+        doc_application_hint: "Download the template, fill it out, sign it and upload as PDF.",
+        doc_package: "New Employee Package",
+        doc_package_hint: "Download the package, complete it and upload as PDF.",
+        btn_download_template: "Download template",
+        dz_mini_title: 'Drag the PDF or <strong>click to select</strong>',
+        dz_mini_hint: "PDF only · max 5 MB",
+        err_file_type: "Only PDF files are allowed.",
+        err_file_size: "The file exceeds the 5 MB max size.",
+
+        lbl_first_name: 'First Name <span class="req">*</span>',
+        lbl_last_name: 'Last Name <span class="req">*</span>',
+        lbl_dob: 'Date of Birth <span class="req">*</span>',
+        lbl_gender: "Gender",
+        lbl_phone: 'Phone <span class="req">*</span>',
+        lbl_email: 'Email <span class="req">*</span>',
+        lbl_street: 'Address <span class="req">*</span>',
+        lbl_city: 'City <span class="req">*</span>',
+        lbl_state: 'State <span class="req">*</span>',
+        lbl_zip: 'ZIP Code <span class="req">*</span>',
+
+        lbl_current_occupation: "Current occupation",
+        lbl_position: 'Position applying for <span class="req">*</span>',
+        lbl_availability: 'Availability <span class="req">*</span>',
+
+        lbl_us_work: 'Authorized to work in the U.S.? <span class="req">*</span>',
+        lbl_english: 'English level <span class="req">*</span>',
+        lbl_other_lang: "Do you speak another language? (multi-select)",
+        lang_en: "English",
+        lang_zh: "Mandarin",
+        lang_hi: "Hindi",
+        lang_es: "Spanish",
+        lang_ar: "Arabic",
+        lang_bn: "Bengali",
+        lang_pt: "Portuguese",
+        lang_ru: "Russian",
+        lang_ja: "Japanese",
+        lang_pa: "Punjabi",
+        lang_de: "German",
+        lang_jv: "Javanese",
+        lang_ko: "Korean",
+        lang_fr: "French",
+        lang_it: "Italian",
+        ph_other_lang_specify: "Specify the language",
+
+        lbl_lift: 'Can you lift 15 lb? <span class="req">*</span>',
+        lbl_cold: 'Can you work in the cold? <span class="req">*</span>',
+
+        lbl_ref_name: 'Reference name <span class="req">*</span>',
+        lbl_ref_phone: 'Reference phone <span class="req">*</span>',
+
+        lbl_cert: "I certify that the information provided is true and accurate to the best of my knowledge.",
+        lbl_signature: 'Full name (signature) <span class="req">*</span>',
+        lbl_date: 'Date <span class="req">*</span>',
+        legal_html: 'By submitting, you agree to Da Silva\'s <a href="#" style="color:var(--navy);font-weight:600;text-decoration:none;">Privacy Policy</a> and consent to be contacted about open roles.',
+
+        opt_male: "Male",
+        opt_female: "Female",
+        opt_no_say: "Prefer not to say",
+        opt_other: "Other",
+        opt_full_time: "Full-time",
+        opt_part_time: "Part-time",
+        opt_weekends: "Weekends",
+        opt_rotating: "Rotating shifts",
+        opt_yes: "Yes",
+        opt_no: "No",
+        opt_basic: "Basic",
+        opt_intermediate: "Intermediate",
+        opt_advanced: "Advanced",
+        opt_select_position: "— Select a position —",
+        opt_select_state: "— Select a state —",
+        opt_select_city: "— Select a city —",
+        opt_select_city_first: "— Select a state first —",
+
+        ph_email: "you@example.com",
+        ph_current_occupation: "e.g. Customer Service Representative",
+        ph_other_lang: "e.g. Portuguese, French…",
+        ph_full_name: "Full name",
+        ph_signature: "Your full name",
+
+        btn_continue: "Continue",
+        btn_back: "Back",
+        btn_submit: "Submit application",
+
+        err_name: "Letters only, numbers are not allowed.",
+        err_email: "Please enter a valid email address.",
+        err_phone: "Numbers only. Please enter a valid phone number (7 to 15 digits).",
+        err_zip: "Please enter a valid 5-digit ZIP code.",
+
+        reject_title: "We're sorry, we can't continue",
+        reject_message: "The positions currently available require legal authorization to work in the United States. Thank you for your interest in Da Silva Consulting & Services.",
+
+        success_title: "Application submitted successfully!",
+        success_message: "We've received your information and documents. Our talent team will review your application and contact you soon.",
+        btn_submitting: "Submitting…",
+        err_submit: "Could not submit the application. Please try again."
+      }
+    };
+
+    function applyLang(lang) {
+      const dict = i18n[lang];
+      // Text content / innerHTML
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) {
+          if (el.tagName === 'TITLE') {
+            document.title = dict[key];
+          } else {
+            el.innerHTML = dict[key];
+          }
+        }
+      });
+      // Placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+      });
+      // Toggle class on switch + html lang
+      const tog = document.querySelector('.lang-toggle');
+      tog.classList.toggle('es', lang === 'es');
+      tog.classList.toggle('en', lang === 'en');
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    // ============================================================
+    // Step navigation + validation
+    // ============================================================
+    (function () {
+      const form = document.getElementById('applyForm');
+      const panels = form.querySelectorAll('.panel');
+      const steps = document.querySelectorAll('.vstep');
+      const totalSteps = 7;
+      let current = 1;
+      let lastNumericStep = 1; // to return from reject screen
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('signature_date').value = today;
+
+      function render() {
+        panels.forEach(p => p.classList.toggle('active', String(p.dataset.panel) === String(current)));
+        steps.forEach(s => {
+          const n = Number(s.dataset.step);
+          if (current === 'reject') {
+            s.classList.remove('active', 'completed');
+          } else {
+            s.classList.toggle('active', n === current);
+            s.classList.toggle('completed', n < current);
+          }
+        });
+        document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // ---- Format validators ----
+      const validators = {
+        // Solo letras (incluye acentos, ñ, espacios, guiones y apóstrofes). NO números, NO símbolos.
+        name: v => v === '' || /^[A-Za-zÀ-ÿñÑ\s'\-]+$/.test(v.trim()),
+        email: v => v === '' || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()),
+        // Solo números: 7 a 15 dígitos exactos
+        phone: v => {
+          if (v === '') return true;
+          return /^\d{7,15}$/.test(v.trim());
+        },
+        // ZIP: exactamente 5 dígitos numéricos entre 10000 y 99999
+        zip: v => {
+          if (v === '') return true;
+          if (!/^\d{5}$/.test(v)) return false;
+          const n = Number(v);
+          return n >= 10000 && n <= 99999;
+        }
+      };
+
+      function validateField(field) {
+        const rule = field.dataset.validate;
+        const input = field.querySelector('input, select, textarea');
+        if (!rule || !input) return true;
+        const ok = validators[rule](input.value);
+        field.classList.toggle('has-error', !ok);
+        return ok;
+      }
+
+      // Filtros de entrada en tiempo real:
+      //  - Campos data-validate="name": solo letras (sin números/símbolos, salvo espacio, guion y apóstrofe)
+      //  - Campos data-validate="phone": solo dígitos
+      form.querySelectorAll('.field[data-validate]').forEach(field => {
+        const input = field.querySelector('input, select, textarea');
+        if (!input) return;
+        const rule = field.dataset.validate;
+        if (rule === 'name') {
+          input.addEventListener('input', () => {
+            const cleaned = input.value.replace(/[^A-Za-zÀ-ÿñÑ\s'\-]/g, '');
+            if (cleaned !== input.value) input.value = cleaned;
+          });
+        } else if (rule === 'phone') {
+          input.setAttribute('inputmode', 'numeric');
+          input.addEventListener('input', () => {
+            const cleaned = input.value.replace(/\D/g, '');
+            if (cleaned !== input.value) input.value = cleaned;
+          });
+        }
+      });
+
+      // Validación en tiempo real (al salir y mientras escribe si ya tiene error)
+      form.querySelectorAll('.field[data-validate]').forEach(field => {
+        const input = field.querySelector('input, select, textarea');
+        if (!input) return;
+        input.addEventListener('blur', () => validateField(field));
+        input.addEventListener('input', () => {
+          if (field.classList.contains('has-error')) validateField(field);
+        });
+      });
+
+      function validateStep(step) {
+        const panel = form.querySelector(`.panel[data-panel="${step}"]`);
+        let firstInvalid = null;
+
+        // Reglas de formato para los campos del paso (aunque estén vacíos no fallan en modo prueba)
+        panel.querySelectorAll('.field[data-validate]').forEach(field => {
+          if (!validateField(field) && !firstInvalid) firstInvalid = field;
+        });
+
+        // Required clásico (vacíos)
+        const required = panel.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]), select[required], textarea[required]');
+        for (const el of required) {
+          if (!el.value) {
+            if (!firstInvalid) firstInvalid = el.closest('.field') || el;
+            el.style.borderColor = 'var(--orange-deep)';
+            el.addEventListener('input', function fix() {
+              el.style.borderColor = '';
+              el.removeEventListener('input', fix);
+            });
+          }
+        }
+
+        const radioGroups = new Set();
+        panel.querySelectorAll('input[type="radio"][required]').forEach(r => radioGroups.add(r.name));
+        for (const name of radioGroups) {
+          const checked = panel.querySelector(`input[type="radio"][name="${name}"]:checked`);
+          if (!checked) {
+            const firstChip = panel.querySelector(`input[type="radio"][name="${name}"]`).closest('.chips');
+            if (firstChip && !firstInvalid) firstInvalid = firstChip;
+            if (firstChip) {
+              firstChip.style.outline = '2px solid var(--orange-deep)';
+              firstChip.style.outlineOffset = '4px';
+              firstChip.style.borderRadius = '8px';
+              setTimeout(() => { firstChip.style.outline = ''; }, 1600);
+            }
+          }
+        }
+
+        const checks = panel.querySelectorAll('input[type="checkbox"][required]');
+        for (const c of checks) {
+          if (!c.checked) {
+            const row = c.closest('.checkbox-row');
+            if (row) row.style.borderColor = 'var(--orange-deep)';
+            if (!firstInvalid) firstInvalid = row || c;
+            c.addEventListener('change', function fix() {
+              if (row) row.style.borderColor = '';
+              c.removeEventListener('change', fix);
+            });
+          }
+        }
+
+        if (firstInvalid) {
+          const focusable = firstInvalid.querySelector ? firstInvalid.querySelector('input, select, textarea') : null;
+          (focusable || firstInvalid).focus?.();
+          firstInvalid.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+          return false;
+        }
+        return true;
+      }
+
+      form.addEventListener('click', e => {
+        if (e.target.matches('[data-next]')) {
+          if (!validateStep(current)) return;
+          // Bifurcación: en el paso 3, si "Autorizado para trabajar en EE.UU." es "No" → pantalla de rechazo
+          if (current === 3) {
+            const usAuth = form.querySelector('input[name="us_work_auth"]:checked');
+            if (usAuth && usAuth.value === 'No') {
+              lastNumericStep = 3;
+              current = 'reject';
+              render();
+              return;
+            }
+          }
+          if (typeof current === 'number' && current < totalSteps) { current++; render(); }
+        }
+        if (e.target.matches('[data-prev]')) {
+          if (typeof current === 'number' && current > 1) { current--; render(); }
+        }
+        if (e.target.matches('[data-reject-back]')) {
+          current = lastNumericStep || 3;
+          render();
+        }
+      });
+
+      // Submit asincrónico al webhook de Make.com (multipart/form-data con datos + PDFs)
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (current === 'reject') return;
+
+        const usAuth = form.querySelector('input[name="us_work_auth"]:checked');
+        if (usAuth && usAuth.value === 'No') {
+          lastNumericStep = 3;
+          current = 'reject';
+          render();
+          return;
+        }
+        for (let s = 1; s <= totalSteps; s++) {
+          if (!validateStep(s)) { current = s; render(); return; }
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const origLabel = submitBtn ? submitBtn.innerHTML : '';
+        const lang = document.documentElement.getAttribute('lang') || 'es';
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = (i18n[lang] && i18n[lang].btn_submitting) || 'Enviando…';
+        }
+
+        try {
+          const fd = new FormData(form);
+
+          // Multi-select idiomas: serializar como string separado por comas para Salesforce
+          const langs = form.querySelectorAll('input[name="other_languages"]:checked');
+          fd.delete('other_languages');
+          if (langs.length) {
+            fd.set('other_languages', Array.from(langs).map(c => c.value).join(', '));
+          }
+
+          // Etiquetas legibles (el ID de Salesforce queda igual; añadimos el nombre del puesto)
+          const posSel = document.getElementById('00Na500001oUa3x');
+          if (posSel && posSel.selectedIndex > 0) {
+            fd.set('position_label', posSel.options[posSel.selectedIndex].text);
+          }
+
+          // Metadata
+          fd.set('source', 'Web Form');
+          fd.set('submitted_at', new Date().toISOString());
+          fd.set('language', lang);
+
+          const res = await fetch(MAKE_WEBHOOK_URL, { method: 'POST', body: fd });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+
+          current = 'success';
+          render();
+        } catch (err) {
+          console.error('Submit error:', err);
+          alert((i18n[lang] && i18n[lang].err_submit) || 'Could not submit.');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = origLabel;
+          }
+        }
+      });
+
+      render();
+    })();
+
+    // ============================================================
+    // US States + Cities cascade (top cities per state)
+    // ============================================================
+    const usStates = {
+      "Alabama": ["Birmingham","Montgomery","Mobile","Huntsville","Tuscaloosa","Hoover","Dothan","Auburn","Decatur","Madison","Florence","Gadsden","Vestavia Hills","Prattville","Phenix City"],
+      "Alaska": ["Anchorage","Fairbanks","Juneau","Sitka","Ketchikan","Wasilla","Kenai","Kodiak","Bethel","Palmer","Homer","Soldotna","Valdez","Nome","Barrow"],
+      "Arizona": ["Phoenix","Tucson","Mesa","Chandler","Scottsdale","Glendale","Gilbert","Tempe","Peoria","Surprise","Yuma","Avondale","Goodyear","Flagstaff","Buckeye","Lake Havasu City","Casa Grande","Sierra Vista","Maricopa","Prescott"],
+      "Arkansas": ["Little Rock","Fort Smith","Fayetteville","Springdale","Jonesboro","North Little Rock","Conway","Rogers","Pine Bluff","Bentonville","Hot Springs","Benton","Texarkana","Sherwood","Jacksonville"],
+      "California": ["Los Angeles","San Diego","San Jose","San Francisco","Fresno","Sacramento","Long Beach","Oakland","Bakersfield","Anaheim","Santa Ana","Riverside","Stockton","Irvine","Chula Vista","Fremont","San Bernardino","Modesto","Fontana","Oxnard","Moreno Valley","Huntington Beach","Glendale","Santa Clarita","Garden Grove","Oceanside","Rancho Cucamonga","Santa Rosa","Ontario","Elk Grove","Corona","Hayward","Lancaster","Salinas","Palmdale","Pomona","Sunnyvale","Escondido","Torrance","Pasadena","Orange","Fullerton","Thousand Oaks","Visalia","Roseville","Concord","Simi Valley","Berkeley","Santa Monica","Beverly Hills"],
+      "Colorado": ["Denver","Colorado Springs","Aurora","Fort Collins","Lakewood","Thornton","Arvada","Westminster","Pueblo","Centennial","Boulder","Greeley","Longmont","Loveland","Broomfield","Grand Junction","Castle Rock","Commerce City","Parker","Littleton"],
+      "Connecticut": ["Bridgeport","New Haven","Stamford","Hartford","Waterbury","Norwalk","Danbury","New Britain","West Hartford","Greenwich","Fairfield","Hamden","Bristol","Meriden","Manchester","West Haven","Milford","Stratford","East Hartford","Middletown"],
+      "Delaware": ["Wilmington","Dover","Newark","Middletown","Smyrna","Milford","Seaford","Georgetown","Elsmere","New Castle","Millsboro","Laurel","Camden","Harrington","Lewes"],
+      "Florida": ["Jacksonville","Miami","Tampa","Orlando","St. Petersburg","Hialeah","Port St. Lucie","Tallahassee","Cape Coral","Fort Lauderdale","Pembroke Pines","Hollywood","Gainesville","Miramar","Coral Springs","Lehigh Acres","Palm Bay","West Palm Beach","Clearwater","Brandon","Lakeland","Pompano Beach","Spring Hill","Miami Gardens","Davie","Riverview","Sunrise","Boca Raton","Deltona","Plantation","Alafaya","Sarasota","Town 'n' Country","Palm Coast","Largo","Deerfield Beach","Melbourne","Boynton Beach","Fort Myers","Kissimmee","Homestead","Daytona Beach","Tamarac","Delray Beach","North Port","Wellington","Doral","Jupiter","Margate"],
+      "Georgia": ["Atlanta","Augusta","Columbus","Macon","Savannah","Athens","Sandy Springs","South Fulton","Roswell","Johns Creek","Warner Robins","Albany","Alpharetta","Marietta","Valdosta","Smyrna","Brookhaven","Dunwoody","Peachtree Corners","Rome","East Point","Milton","Gainesville","Hinesville","Newnan","Peachtree City","Douglasville","Kennesaw","Lawrenceville","Statesboro"],
+      "Hawaii": ["Honolulu","East Honolulu","Pearl City","Hilo","Kailua","Waipahu","Kaneohe","Mililani Town","Kahului","Ewa Gentry","Mililani Mauka","Kihei","Makakilo","Wahiawa","Schofield Barracks","Wailuku","Kapolei","Ewa Beach","Halawa","Aiea"],
+      "Idaho": ["Boise","Meridian","Nampa","Idaho Falls","Caldwell","Pocatello","Coeur d'Alene","Twin Falls","Lewiston","Post Falls","Rexburg","Eagle","Moscow","Mountain Home","Ammon","Kuna","Hayden","Chubbuck","Garden City","Jerome"],
+      "Illinois": ["Chicago","Aurora","Joliet","Naperville","Rockford","Springfield","Elgin","Peoria","Champaign","Waukegan","Cicero","Bloomington","Arlington Heights","Evanston","Schaumburg","Decatur","Bolingbrook","Palatine","Skokie","Des Plaines","Orland Park","Tinley Park","Oak Lawn","Berwyn","Mount Prospect","Wheaton","Hoffman Estates","Oak Park","Downers Grove","Elmhurst","Glenview","Lombard","Buffalo Grove","DeKalb","Plainfield","Belleville","Crystal Lake","Romeoville"],
+      "Indiana": ["Indianapolis","Fort Wayne","Evansville","South Bend","Carmel","Fishers","Bloomington","Hammond","Gary","Lafayette","Muncie","Noblesville","Greenwood","Terre Haute","Kokomo","Anderson","Elkhart","Mishawaka","Lawrence","Jeffersonville","Columbus","Westfield","Portage","New Albany","Richmond","Valparaiso","Goshen","Michigan City","West Lafayette","Marion"],
+      "Iowa": ["Des Moines","Cedar Rapids","Davenport","Sioux City","Iowa City","Waterloo","Ames","West Des Moines","Council Bluffs","Dubuque","Ankeny","Urbandale","Cedar Falls","Marion","Bettendorf","Mason City","Clinton","Burlington","Ottumwa","Fort Dodge"],
+      "Kansas": ["Wichita","Overland Park","Kansas City","Olathe","Topeka","Lawrence","Shawnee","Manhattan","Lenexa","Salina","Hutchinson","Leavenworth","Leawood","Dodge City","Garden City","Junction City","Emporia","Derby","Prairie Village","Liberal"],
+      "Kentucky": ["Louisville","Lexington","Bowling Green","Owensboro","Covington","Hopkinsville","Richmond","Florence","Georgetown","Henderson","Elizabethtown","Nicholasville","Frankfort","Independence","Jeffersontown","Paducah","Radcliff","Ashland","Madisonville","Murray"],
+      "Louisiana": ["New Orleans","Baton Rouge","Shreveport","Metairie","Lafayette","Lake Charles","Kenner","Bossier City","Monroe","Alexandria","Houma","New Iberia","Slidell","Prairieville","Central","Marrero","Hammond","Sulphur","Harvey","Bayou Cane"],
+      "Maine": ["Portland","Lewiston","Bangor","South Portland","Auburn","Biddeford","Sanford","Saco","Augusta","Westbrook","Waterville","Brewer","Presque Isle","Bath","Caribou"],
+      "Maryland": ["Baltimore","Frederick","Rockville","Gaithersburg","Bowie","Hagerstown","Annapolis","College Park","Salisbury","Laurel","Greenbelt","Cumberland","Westminster","Hyattsville","Takoma Park","Easton","Elkton","Aberdeen","Havre de Grace","Cambridge"],
+      "Massachusetts": ["Boston","Worcester","Springfield","Cambridge","Lowell","Brockton","Quincy","Lynn","New Bedford","Fall River","Newton","Lawrence","Somerville","Framingham","Haverhill","Waltham","Malden","Brookline","Plymouth","Medford","Taunton","Chicopee","Weymouth","Revere","Peabody","Methuen","Barnstable","Pittsfield","Attleboro","Arlington","Everett","Salem","Westfield","Leominster","Fitchburg","Beverly","Holyoke","Marlborough","Woburn","Chelsea"],
+      "Michigan": ["Detroit","Grand Rapids","Warren","Sterling Heights","Ann Arbor","Lansing","Flint","Dearborn","Livonia","Troy","Westland","Farmington Hills","Kalamazoo","Wyoming","Southfield","Rochester Hills","Taylor","Saint Clair Shores","Pontiac","Royal Oak","Novi","Dearborn Heights","Battle Creek","Saginaw","Kentwood","East Lansing","Roseville","Portage","Midland","Lincoln Park","Muskegon","Bay City","Jackson","Holland","Burton","Auburn Hills","Eastpointe"],
+      "Minnesota": ["Minneapolis","Saint Paul","Rochester","Duluth","Bloomington","Brooklyn Park","Plymouth","Maple Grove","Woodbury","Saint Cloud","Eagan","Eden Prairie","Coon Rapids","Burnsville","Blaine","Lakeville","Minnetonka","Apple Valley","Edina","Saint Louis Park","Mankato","Moorhead","Maplewood","Shakopee","Cottage Grove","Richfield","Roseville","Inver Grove Heights","Andover"],
+      "Mississippi": ["Jackson","Gulfport","Southaven","Hattiesburg","Biloxi","Meridian","Tupelo","Olive Branch","Greenville","Horn Lake","Pearl","Madison","Starkville","Clinton","Brandon","Ridgeland","Columbus","Vicksburg","Pascagoula","Oxford"],
+      "Missouri": ["Kansas City","Saint Louis","Springfield","Columbia","Independence","Lee's Summit","O'Fallon","Saint Joseph","Saint Charles","Saint Peters","Blue Springs","Florissant","Joplin","Chesterfield","Jefferson City","Cape Girardeau","Wildwood","University City","Ballwin","Raytown","Liberty","Wentzville","Kirkwood","Maryland Heights","Hazelwood","Gladstone"],
+      "Montana": ["Billings","Missoula","Great Falls","Bozeman","Butte","Helena","Kalispell","Havre","Anaconda","Miles City","Belgrade","Livingston","Laurel","Whitefish","Lewistown","Sidney","Glendive","Hamilton","Polson","Dillon"],
+      "Nebraska": ["Omaha","Lincoln","Bellevue","Grand Island","Kearney","Fremont","Hastings","Norfolk","North Platte","Columbus","Papillion","La Vista","Scottsbluff","South Sioux City","Beatrice","Lexington","Gering","Alliance","Blair","York"],
+      "Nevada": ["Las Vegas","Henderson","Reno","North Las Vegas","Sparks","Carson City","Fernley","Elko","Mesquite","Boulder City","Fallon","Winnemucca","West Wendover","Ely","Yerington","Lovelock","Wells","Caliente","Carlin"],
+      "New Hampshire": ["Manchester","Nashua","Concord","Derry","Dover","Rochester","Salem","Merrimack","Hudson","Londonderry","Keene","Bedford","Portsmouth","Goffstown","Laconia","Hampton","Milford","Durham","Exeter","Windham"],
+      "New Jersey": ["Newark","Jersey City","Paterson","Elizabeth","Edison","Woodbridge","Lakewood","Toms River","Hamilton","Trenton","Clifton","Camden","Brick","Cherry Hill","Passaic","Middletown","Union City","Old Bridge","Gloucester","East Orange","Bayonne","Franklin","North Bergen","Vineland","Union","Piscataway","New Brunswick","Jackson","Wayne","Irvington","Parsippany-Troy Hills","Howell","Perth Amboy","Plainfield","Bloomfield","East Brunswick","West New York","Westfield","Hoboken"],
+      "New Mexico": ["Albuquerque","Las Cruces","Rio Rancho","Santa Fe","Roswell","Farmington","Hobbs","Clovis","Alamogordo","Carlsbad","Gallup","Los Lunas","Deming","Chaparral","Sunland Park","Las Vegas","Portales","Los Alamos","North Valley","Artesia"],
+      "New York": ["New York","Buffalo","Yonkers","Rochester","Syracuse","Albany","New Rochelle","Mount Vernon","Schenectady","Utica","White Plains","Hempstead","Troy","Niagara Falls","Binghamton","Freeport","Valley Stream","Long Beach","Rome","Ithaca","Poughkeepsie","North Tonawanda","Spring Valley","Jamestown","Newburgh","Saratoga Springs","Middletown","Watertown","Glen Cove","Auburn","Elmira","Brooklyn","Queens","Bronx","Staten Island","Manhattan"],
+      "North Carolina": ["Charlotte","Raleigh","Greensboro","Durham","Winston-Salem","Fayetteville","Cary","Wilmington","High Point","Greenville","Asheville","Concord","Gastonia","Jacksonville","Chapel Hill","Rocky Mount","Burlington","Huntersville","Wilson","Kannapolis","Apex","Hickory","Goldsboro","Indian Trail","Mooresville","Wake Forest","Monroe","Salisbury","New Bern","Holly Springs","Matthews","Sanford","Cornelius","Garner","Thomasville","Asheboro","Statesville"],
+      "North Dakota": ["Fargo","Bismarck","Grand Forks","Minot","West Fargo","Williston","Dickinson","Mandan","Jamestown","Wahpeton","Devils Lake","Watford City","Valley City","Grafton","Beulah","Lincoln","Rugby","Stanley","Hazen","Bottineau"],
+      "Ohio": ["Columbus","Cleveland","Cincinnati","Toledo","Akron","Dayton","Parma","Canton","Youngstown","Lorain","Hamilton","Springfield","Kettering","Elyria","Lakewood","Cuyahoga Falls","Middletown","Euclid","Newark","Mansfield","Mentor","Beavercreek","Cleveland Heights","Strongsville","Dublin","Fairfield","Findlay","Warren","Lancaster","Lima","Huber Heights","Marion","Westerville","Reynoldsburg","Grove City","Brunswick","Upper Arlington","Stow","Gahanna","North Olmsted","Fairborn"],
+      "Oklahoma": ["Oklahoma City","Tulsa","Norman","Broken Arrow","Lawton","Edmond","Moore","Midwest City","Enid","Stillwater","Muskogee","Bartlesville","Owasso","Shawnee","Yukon","Ardmore","Ponca City","Bixby","Duncan","Del City","Jenks","Sapulpa","Mustang","Sand Springs","Bethany"],
+      "Oregon": ["Portland","Salem","Eugene","Gresham","Hillsboro","Beaverton","Bend","Medford","Springfield","Corvallis","Albany","Tigard","Lake Oswego","Keizer","Grants Pass","Oregon City","McMinnville","Redmond","Tualatin","West Linn","Woodburn","Forest Grove","Newberg","Wilsonville","Roseburg","Klamath Falls","Ashland","Milwaukie","Pendleton","Hermiston"],
+      "Pennsylvania": ["Philadelphia","Pittsburgh","Allentown","Erie","Reading","Scranton","Bethlehem","Lancaster","Harrisburg","Altoona","York","State College","Wilkes-Barre","Chester","Norristown","Bethel Park","Williamsport","Monroeville","Plum","Easton","Lebanon","McKeesport","Hazleton","New Castle","Johnstown","West Mifflin","Chambersburg","Hermitage","Carlisle","Hanover","Pottstown","Sharon","Greensburg","Phoenixville","Butler","Indiana"],
+      "Rhode Island": ["Providence","Warwick","Cranston","Pawtucket","East Providence","Woonsocket","Coventry","Cumberland","North Providence","South Kingstown","West Warwick","Johnston","North Kingstown","Newport","Bristol","Westerly","Smithfield","Lincoln","Central Falls","Portsmouth"],
+      "South Carolina": ["Charleston","Columbia","North Charleston","Mount Pleasant","Rock Hill","Greenville","Summerville","Sumter","Goose Creek","Hilton Head Island","Florence","Spartanburg","Myrtle Beach","Aiken","Anderson","Greer","Mauldin","Greenwood","North Augusta","Easley","Simpsonville","Hanahan","Lexington","Conway","West Columbia","North Myrtle Beach","Clemson","Orangeburg","Cayce","Bluffton"],
+      "South Dakota": ["Sioux Falls","Rapid City","Aberdeen","Brookings","Watertown","Mitchell","Yankton","Pierre","Huron","Vermillion","Spearfish","Brandon","Box Elder","Madison","Sturgis","Belle Fourche","Harrisburg","Tea","Dell Rapids","Mobridge"],
+      "Tennessee": ["Nashville","Memphis","Knoxville","Chattanooga","Clarksville","Murfreesboro","Franklin","Jackson","Johnson City","Bartlett","Hendersonville","Kingsport","Collierville","Cleveland","Smyrna","Germantown","Brentwood","Columbia","La Vergne","Gallatin","Cookeville","Mount Juliet","Lebanon","Morristown","Oak Ridge","Maryville","Bristol","Farragut","Shelbyville","East Ridge","Tullahoma","Spring Hill"],
+      "Texas": ["Houston","San Antonio","Dallas","Austin","Fort Worth","El Paso","Arlington","Corpus Christi","Plano","Laredo","Lubbock","Garland","Irving","Frisco","McKinney","Amarillo","Grand Prairie","Brownsville","Killeen","Pasadena","Mesquite","McAllen","Denton","Waco","Carrollton","Midland","Round Rock","Abilene","Pearland","Richardson","Odessa","Sugar Land","College Station","Lewisville","Beaumont","Tyler","San Angelo","Allen","League City","Wichita Falls","Edinburg","Bryan","Pharr","Conroe","Mission","Longview","New Braunfels","Baytown","Atascocita","Cedar Park","Mansfield","Georgetown","Flower Mound","San Marcos","North Richland Hills","Victoria","Rowlett","Pflugerville","Port Arthur","Euless","Galveston","Harlingen","DeSoto","Temple","Missouri City","Grapevine"],
+      "Utah": ["Salt Lake City","West Valley City","West Jordan","Provo","Orem","Sandy","Ogden","Saint George","Layton","South Jordan","Lehi","Millcreek","Taylorsville","Logan","Murray","Draper","Bountiful","Riverton","Herriman","Spanish Fork","Roy","Pleasant Grove","Tooele","Cedar City","Kearns","Midvale","Cottonwood Heights","Springville","American Fork","Eagle Mountain"],
+      "Vermont": ["Burlington","South Burlington","Rutland","Essex Junction","Barre","Montpelier","Winooski","St. Albans","Newport","Vergennes","Brattleboro","Bennington","Middlebury","St. Johnsbury","Hartford","Springfield","Williston","Colchester","Milton","Essex"],
+      "Virginia": ["Virginia Beach","Norfolk","Chesapeake","Richmond","Newport News","Alexandria","Hampton","Roanoke","Portsmouth","Suffolk","Lynchburg","Harrisonburg","Charlottesville","Danville","Manassas","Petersburg","Fredericksburg","Winchester","Salem","Staunton","Hopewell","Fairfax","Waynesboro","Colonial Heights","Radford","Falls Church","Poquoson","Williamsburg","Bristol","Martinsville","Galax"],
+      "Washington": ["Seattle","Spokane","Tacoma","Vancouver","Bellevue","Kent","Everett","Renton","Federal Way","Spokane Valley","Yakima","Kirkland","Bellingham","Kennewick","Auburn","Pasco","Marysville","Lakewood","Redmond","Sammamish","Richland","Burien","Olympia","Edmonds","Bremerton","Lacey","Puyallup","Bothell","Lynnwood","Longview","Issaquah","Wenatchee","Mount Vernon","University Place","Walla Walla","Pullman","Des Moines","Lake Stevens","SeaTac","Maple Valley"],
+      "West Virginia": ["Charleston","Huntington","Morgantown","Parkersburg","Wheeling","Weirton","Fairmont","Martinsburg","Beckley","Clarksburg","South Charleston","St. Albans","Vienna","Bluefield","Cross Lanes","Moundsville","Bridgeport","Oak Hill","Dunbar","Elkins"],
+      "Wisconsin": ["Milwaukee","Madison","Green Bay","Kenosha","Racine","Appleton","Waukesha","Eau Claire","Oshkosh","Janesville","West Allis","La Crosse","Sheboygan","Wauwatosa","Fond du Lac","New Berlin","Wausau","Brookfield","Beloit","Greenfield","Menomonee Falls","Franklin","Oak Creek","Manitowoc","West Bend","Sun Prairie","Superior","Stevens Point","Neenah","Fitchburg","Mount Pleasant","Caledonia","De Pere","Muskego"],
+      "Wyoming": ["Cheyenne","Casper","Laramie","Gillette","Rock Springs","Sheridan","Green River","Evanston","Riverton","Jackson","Cody","Rawlins","Lander","Torrington","Powell","Douglas","Worland","Buffalo","Wheatland","Newcastle"],
+      "District of Columbia": ["Washington"]
+    };
+
+    (function () {
+      const stateSel = document.getElementById('state');
+      const citySel = document.getElementById('city');
+      if (!stateSel || !citySel) return;
+
+      // Populate states alphabetically
+      Object.keys(usStates).sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        stateSel.appendChild(opt);
+      });
+
+      function getCityPlaceholderKey() {
+        return stateSel.value ? 'opt_select_city' : 'opt_select_city_first';
+      }
+
+      function refreshCityPlaceholder() {
+        const lang = document.documentElement.getAttribute('lang') || 'es';
+        const key = getCityPlaceholderKey();
+        const placeholder = citySel.querySelector('option[value=""]');
+        if (placeholder) {
+          placeholder.setAttribute('data-i18n', key);
+          placeholder.textContent = (i18n[lang] && i18n[lang][key]) || placeholder.textContent;
+        }
+      }
+
+      stateSel.addEventListener('change', () => {
+        const cities = usStates[stateSel.value] || [];
+        // Clear existing options keeping the placeholder
+        citySel.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        citySel.appendChild(placeholder);
+        cities.slice().sort().forEach(c => {
+          const o = document.createElement('option');
+          o.value = c;
+          o.textContent = c;
+          citySel.appendChild(o);
+        });
+        citySel.disabled = cities.length === 0;
+        refreshCityPlaceholder();
+      });
+
+      refreshCityPlaceholder();
+    })();
+
+    // ============================================================
+    // Documentos: 3 slots independientes (ID, Solicitud, Paquete)
+    // Cada slot acepta 1 PDF (máx 10 MB) con drag & drop
+    // ============================================================
+    (function () {
+      const MAX_SIZE = 5 * 1024 * 1024; // 5 MB (límite del webhook de Make.com)
+
+      function t(key) {
+        const lang = document.documentElement.getAttribute('lang') || 'es';
+        return (i18n[lang] && i18n[lang][key]) || key;
+      }
+
+      function fmtSize(b) {
+        if (b < 1024) return b + ' B';
+        if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+        return (b / 1024 / 1024).toFixed(2) + ' MB';
+      }
+
+      function setupSlot(dropzone) {
+        const slotName = dropzone.getAttribute('data-dz-target');
+        const input = document.querySelector(`[data-dz-input="${slotName}"]`);
+        const list = document.querySelector(`[data-dz-list="${slotName}"]`);
+        const errorEl = document.querySelector(`[data-dz-error="${slotName}"]`);
+        if (!input || !list || !errorEl) return;
+
+        let current = null; // un único archivo por slot
+
+        function showError(key) {
+          errorEl.textContent = t(key);
+          errorEl.style.display = 'block';
+          clearTimeout(errorEl._t);
+          errorEl._t = setTimeout(() => { errorEl.style.display = 'none'; }, 4000);
+        }
+
+        function syncInputFiles() {
+          const dt = new DataTransfer();
+          if (current) dt.items.add(current);
+          input.files = dt.files;
+        }
+
+        function renderList() {
+          list.innerHTML = '';
+          if (!current) return;
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-ico">PDF</div>
+            <div class="file-meta">
+              <div class="file-name"></div>
+              <div class="file-size"></div>
+            </div>
+            <button type="button" class="file-remove" aria-label="Remove">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          `;
+          item.querySelector('.file-name').textContent = current.name;
+          item.querySelector('.file-size').textContent = fmtSize(current.size);
+          item.querySelector('.file-remove').addEventListener('click', () => {
+            current = null;
+            syncInputFiles();
+            renderList();
+          });
+          list.appendChild(item);
+        }
+
+        function setFile(file) {
+          const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+          if (!isPdf) { showError('err_file_type'); return; }
+          if (file.size > MAX_SIZE) { showError('err_file_size'); return; }
+          current = file;
+          syncInputFiles();
+          renderList();
+        }
+
+        dropzone.addEventListener('click', e => {
+          if (e.target.closest('.file-remove')) return;
+          input.click();
+        });
+        dropzone.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+        });
+        input.addEventListener('change', () => {
+          if (input.files && input.files.length) setFile(input.files[0]);
+        });
+
+        ['dragenter', 'dragover'].forEach(ev => {
+          dropzone.addEventListener(ev, e => {
+            e.preventDefault(); e.stopPropagation();
+            dropzone.classList.add('dragover');
+          });
+        });
+        ['dragleave', 'drop'].forEach(ev => {
+          dropzone.addEventListener(ev, e => {
+            e.preventDefault(); e.stopPropagation();
+            dropzone.classList.remove('dragover');
+          });
+        });
+        dropzone.addEventListener('drop', e => {
+          const files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files.length) setFile(files[0]);
+        });
+      }
+
+      document.querySelectorAll('.dropzone[data-dz-target]').forEach(setupSlot);
+
+      // Evitar que el browser abra el PDF si lo soltamos fuera de cualquier dropzone
+      window.addEventListener('dragover', e => e.preventDefault());
+      window.addEventListener('drop', e => e.preventDefault());
+    })();
+
+    // ============================================================
+    // "Otro" idioma: mostrar input cuando se marca el chip "Otro"
+    // ============================================================
+    (function () {
+      const otherChk = document.getElementById('lang_other_chk');
+      const otherInput = document.getElementById('other_language_text');
+      if (!otherChk || !otherInput) return;
+      otherChk.addEventListener('change', () => {
+        otherInput.style.display = otherChk.checked ? 'block' : 'none';
+        if (otherChk.checked) otherInput.focus();
+        else otherInput.value = '';
+      });
+    })();
+
+    // Initialize default language
+    applyLang('es');
+  </script>
+</body>
+</html>
