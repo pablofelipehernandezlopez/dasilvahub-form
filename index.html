@@ -31,7 +31,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
+      background: var(--card);
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -44,7 +44,8 @@
       padding: 14px 32px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px 20px;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -53,10 +54,8 @@
       height: 56px;
       width: auto;
     }
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    .topbar .lang-toggle {
+      margin-left: auto;
     }
     .topbar .help {
       font-size: 13px;
@@ -224,6 +223,7 @@
       text-align: center;
     }
     .side-footer strong { color: rgba(255,255,255,0.85); font-weight: 700; }
+    .step-counter { display: none; }
 
     /* ---------- Right panel: form ---------- */
     .main {
@@ -698,37 +698,88 @@
     }
 
     /* ---------- Responsive ---------- */
+    /* ---------- Site footer (shared with company-home) ---------- */
+    .site-footer { background: var(--navy-deep); color: #cbd8e6; padding: 48px 0 24px; }
+    .footwrap { max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+    .footgrid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 36px; margin-bottom: 32px; }
+    .footbrand { display: inline-block; }
+    .footbrand img { height: 32px; filter: brightness(0) invert(1); }
+    .site-footer p { margin: 14px 0 0; max-width: 320px; font-size: 13px; line-height: 1.6; color: #a9bdd4; }
+    .foot-social { display: flex; gap: 10px; margin-top: 14px; }
+    .foot-social a {
+      width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center; font-size: 14px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .foot-social a:hover { background: var(--orange); }
+    .site-footer h4 { color: #fff; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 14px; }
+    .site-footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+    .site-footer a { color: #cbd8e6; font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .site-footer a:hover { color: #fff; }
+    .site-footer li { font-size: 13px; color: #cbd8e6; }
+    .footbottom {
+      border-top: 1px solid rgba(255,255,255,0.12); padding-top: 18px; font-size: 11px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: #7f97b3;
+    }
+
     @media (max-width: 880px) {
-      .topbar { padding: 12px 18px; flex-wrap: wrap; gap: 8px; }
-      .topbar img.logo { height: 42px; }
-      .topbar-right { gap: 12px; }
-      .page { padding: 0; min-height: auto; }
-      .card { grid-template-columns: 1fr; min-height: auto; }
-      .side { padding: 24px 24px 28px; }
+      .topbar { padding: 10px 18px; gap: 4px 10px; }
+      .topbar img.logo { height: 38px; }
+      .topbar .lang-toggle { transform: scale(0.82); transform-origin: right center; margin-left: auto; }
+      .topbar .help { width: 100%; order: 3; text-align: left; font-size: 11px; }
+      .page { padding: 0; min-height: calc(100vh - 78px); }
+      .page { min-height: calc(100dvh - 78px); }
+      .card { grid-template-columns: 1fr; min-height: inherit; }
+      .side { padding: 20px 20px 22px; }
       .side::after { display: none; }
       .side-brand { margin-bottom: 20px; }
-      .vsteps { display: flex; justify-content: space-between; gap: 4px; overflow-x: auto; }
-      .vstep { flex-direction: column; align-items: center; gap: 6px; padding: 0; flex: 1 0 auto; text-align: center; min-width: 60px; }
+
+      .vsteps-wrap { position: relative; }
+      .vsteps-wrap::before,
+      .vsteps-wrap::after {
+        content: ""; position: absolute; top: 0; bottom: 0; width: 26px;
+        pointer-events: none; opacity: 0; transition: opacity 0.2s ease; z-index: 2;
+      }
+      .vsteps-wrap::before { left: 0; background: linear-gradient(270deg, transparent, var(--navy)); }
+      .vsteps-wrap::after { right: 0; background: linear-gradient(90deg, transparent, var(--navy)); }
+      .vsteps-wrap.fade-left::before { opacity: 1; }
+      .vsteps-wrap.fade-right::after { opacity: 1; }
+
+      .vsteps { display: flex; justify-content: flex-start; gap: 4px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 2px; }
+      .vstep { flex-direction: column; align-items: center; gap: 5px; padding: 0; flex: 1 0 auto; text-align: center; min-width: 56px; scroll-snap-align: center; }
       .vstep + .vstep::before { display: none; }
-      .vstep .vlabel { font-size: 11px; padding-top: 0; }
+      .vstep .vbubble { width: 22px; height: 22px; }
+      .vstep .vbubble svg { width: 11px; height: 11px; }
+      .vstep .vlabel { font-size: 10.5px; padding-top: 0; }
+      .vstep.active .vlabel { font-size: 12px; }
+
+      .step-counter {
+        display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+        margin-top: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      }
+      #stepCounterText { color: rgba(255,255,255,0.75); }
+      .step-counter .swipe-hint { color: rgba(255,255,255,0.45); font-weight: 600; }
+
       .main { padding: 28px 20px; }
       .field-row, .field-row-3 { grid-template-columns: 1fr; }
+
+      .footwrap { padding: 0 20px; }
+      .footgrid { grid-template-columns: 1fr; gap: 28px; }
+      .footbottom { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
     <img src="assets/dasilva-logo.png" alt="Da Silva Consulting & Services" class="logo">
-    <div class="topbar-right">
-      <div class="lang-toggle es" role="group" aria-label="Language / Idioma">
-        <span class="slider" aria-hidden="true"></span>
-        <button type="button" class="lang-btn" data-lang="es"><span class="flag">🇪🇸</span>ES</button>
-        <button type="button" class="lang-btn" data-lang="en"><span class="flag">🇺🇸</span>EN</button>
-      </div>
-      <div class="help">
-        <span data-i18n="help_label">¿Necesitas ayuda?</span>
-        <a href="mailto:info@dasilvaconsultingservices.net">info@dasilvaconsultingservices.net</a>
-      </div>
+    <div class="lang-toggle es" role="group" aria-label="Language / Idioma">
+      <span class="slider" aria-hidden="true"></span>
+      <button type="button" class="lang-btn" data-lang="es"><span class="flag">🇪🇸</span>ES</button>
+      <button type="button" class="lang-btn" data-lang="en"><span class="flag">🇺🇸</span>EN</button>
+    </div>
+    <div class="help">
+      <span data-i18n="help_label">¿Necesitas ayuda?</span>
+      <a href="mailto:info@dasilvaconsultingservices.net">info@dasilvaconsultingservices.net</a>
     </div>
   </header>
 
@@ -737,7 +788,8 @@
       <!-- LEFT: vertical stepper -->
       <aside class="side">
         <div class="side-inner">
-          <div class="vsteps">
+          <div class="vsteps-wrap" id="vstepsWrap">
+          <div class="vsteps" id="vsteps">
             <div class="vstep active" data-step="1">
               <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
               <div class="vlabel" data-i18n="step1_title">Información Personal</div>
@@ -766,6 +818,11 @@
               <div class="vbubble"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
               <div class="vlabel" data-i18n="step7_title">Confirmación</div>
             </div>
+          </div>
+          </div>
+          <div class="step-counter">
+            <span id="stepCounterText">Paso 1 de 7</span>
+            <span class="swipe-hint" data-i18n="step_swipe_hint">‹ Desliza para ver los pasos ›</span>
           </div>
           <div class="side-footer">Powered by <strong>Aurora Digital</strong>&reg;</div>
         </div>
@@ -1187,6 +1244,43 @@
     </div>
   </main>
 
+  <footer class="site-footer">
+    <div class="footwrap">
+      <div class="footgrid">
+        <div>
+          <a class="footbrand" href="https://www.dasilvaconsultingservices.net/"><img src="assets/dasilva-logo-transparent.png" alt="Da Silva Consulting & Services"></a>
+          <p data-i18n="foot_tagline">Reclutamiento y staffing en Florida y Estados Unidos. Conectamos empresas con el talento correcto.</p>
+          <div class="foot-social">
+            <a href="https://www.instagram.com/dasilvaconsultings/" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+            <a href="https://www.linkedin.com/company/dasilvaconsultings/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+            <a href="https://wa.me/17864297981" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+          </div>
+        </div>
+        <div>
+          <h4 data-i18n="foot_nav">Navegación</h4>
+          <ul>
+            <li><a href="https://www.dasilvaconsultingservices.net/">Inicio</a></li>
+            <li><a href="https://www.dasilvaconsultingservices.net/#servicios" data-i18n="nav_como">Cómo trabajamos</a></li>
+            <li><a href="https://www.dasilvaconsultingservices.net/#nosotros" data-i18n="nav_nosotros">Nosotros</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="foot_contact">Contacto</h4>
+          <ul>
+            <li>6700 NW 77th Ct, #200, Miami, FL 33166</li>
+            <li><a href="https://wa.me/17864297981" target="_blank" rel="noopener">+1 (786) 429-7981</a></li>
+            <li><a href="mailto:info@dasilvaconsultingservices.net">info@dasilvaconsultingservices.net</a></li>
+            <li><a href="https://www.dasilvaconsultingservices.net/" target="_blank" rel="noopener">dasilvaconsultingservices.net</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footbottom">
+        <span data-i18n="foot_rights">© 2026 Da Silva Consulting &amp; Services. Todos los derechos reservados.</span>
+        <span data-i18n="foot_powered">Powered by Aurora Digital®</span>
+      </div>
+    </div>
+  </footer>
+
   <script>
     // ============================================================
     // Configuración de integración
@@ -1211,6 +1305,12 @@
         step5_title: "Referencia",
         step6_title: "Documentos",
         step7_title: "Confirmación",
+        step_of: "Paso {n} de {total}",
+        step_swipe_hint: "Desliza para ver los pasos",
+        foot_tagline: "Reclutamiento y staffing en Florida y Estados Unidos. Conectamos empresas con el talento correcto.",
+        foot_nav: "Navegación", nav_como: "Cómo trabajamos", nav_nosotros: "Nosotros",
+        foot_contact: "Contacto", foot_rights: "© 2026 Da Silva Consulting & Services. Todos los derechos reservados.",
+        foot_powered: "Powered by Aurora Digital®",
 
         hero_title: "Aplica a nuestros empleos",
         hero_subtitle: "Cuéntanos sobre ti — completa los pasos a continuación. Toma alrededor de 5 minutos.",
@@ -1333,6 +1433,12 @@
         step5_title: "Reference",
         step6_title: "Documents",
         step7_title: "Confirmation",
+        step_of: "Step {n} of {total}",
+        step_swipe_hint: "Swipe to see all steps",
+        foot_tagline: "Staffing and recruitment in Florida and the United States. Connecting companies with the right talent.",
+        foot_nav: "Navigation", nav_como: "How We Work", nav_nosotros: "About Us",
+        foot_contact: "Contact", foot_rights: "© 2026 Da Silva Consulting & Services. All rights reserved.",
+        foot_powered: "Powered by Aurora Digital®",
 
         hero_title: "Apply to our open jobs",
         hero_subtitle: "Tell us about yourself — complete the steps below. Takes about 5 minutes.",
@@ -1469,6 +1575,16 @@
       tog.classList.toggle('es', lang === 'es');
       tog.classList.toggle('en', lang === 'en');
       document.documentElement.setAttribute('lang', lang);
+      updateStepCounterText();
+    }
+
+    function updateStepCounterText() {
+      const state = window.__dsStepState || { current: 1, total: 7 };
+      const lang = document.documentElement.getAttribute('lang') || 'es';
+      const dict = i18n[lang] || i18n.es;
+      const el = document.getElementById('stepCounterText');
+      if (!el || typeof state.current !== 'number' || !dict.step_of) return;
+      el.textContent = dict.step_of.replace('{n}', state.current).replace('{total}', state.total);
     }
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -1489,6 +1605,21 @@
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('signature_date').value = today;
 
+      const vstepsEl = document.getElementById('vsteps');
+      const vstepsWrapEl = document.getElementById('vstepsWrap');
+
+      function updateSwipeFade() {
+        if (!vstepsEl || !vstepsWrapEl) return;
+        const atStart = vstepsEl.scrollLeft <= 2;
+        const atEnd = vstepsEl.scrollLeft + vstepsEl.clientWidth >= vstepsEl.scrollWidth - 2;
+        vstepsWrapEl.classList.toggle('fade-left', !atStart);
+        vstepsWrapEl.classList.toggle('fade-right', !atEnd);
+      }
+      if (vstepsEl) {
+        vstepsEl.addEventListener('scroll', updateSwipeFade);
+        window.addEventListener('resize', updateSwipeFade);
+      }
+
       function render() {
         panels.forEach(p => p.classList.toggle('active', String(p.dataset.panel) === String(current)));
         steps.forEach(s => {
@@ -1500,6 +1631,11 @@
             s.classList.toggle('completed', n < current);
           }
         });
+        window.__dsStepState = { current: (typeof current === 'number' ? current : lastNumericStep), total: totalSteps };
+        updateStepCounterText();
+        const activeStep = document.querySelector('.vstep.active');
+        if (activeStep) activeStep.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        requestAnimationFrame(updateSwipeFade);
         document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
