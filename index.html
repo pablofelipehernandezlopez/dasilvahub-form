@@ -643,6 +643,88 @@
       .doc-grid { grid-template-columns: 1fr; }
     }
 
+    /* ---------- Documents warning banner ---------- */
+    .doc-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      background: rgba(237,137,54,0.08);
+      border: 1.5px solid rgba(237,137,54,0.35);
+      border-radius: var(--radius-sm);
+    }
+    .doc-banner svg {
+      width: 20px;
+      height: 20px;
+      color: var(--orange-deep);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .doc-banner strong {
+      display: block;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .doc-banner p {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ---------- Document upload confirmation modal ---------- */
+    .doc-confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+    .doc-confirm-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 420px;
+      width: 100%;
+      padding: 24px;
+    }
+    .doc-confirm-box h3 {
+      font-size: 17px;
+      color: var(--ink);
+      margin: 0 0 10px;
+    }
+    .doc-confirm-box p {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+    .doc-confirm-box p strong { color: var(--ink); }
+    .doc-confirm-file {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      margin-bottom: 18px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--navy);
+      word-break: break-all;
+    }
+    .doc-confirm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
     /* ---------- Rejection screen ---------- */
     .reject-screen {
       display: flex;
@@ -1057,7 +1139,19 @@
           <div class="panel" data-panel="6">
             <div class="panel-body">
               <h2 data-i18n="step6_title">Documentos</h2>
-              <p class="subtitle" data-i18n="step6_subtitle">Carga los siguientes documentos en formato PDF (máx. 10 MB cada uno).</p>
+              <p class="subtitle" data-i18n="step6_subtitle">Carga los siguientes documentos en formato PDF (máx. 5 MB cada uno).</p>
+
+              <div class="doc-banner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <div>
+                  <strong data-i18n="doc_banner_title">Sube cada documento por separado</strong>
+                  <p data-i18n="doc_banner_text">No tomes una sola foto ni combines varios documentos en un mismo archivo. Cada casilla debe contener únicamente el documento que se indica.</p>
+                </div>
+              </div>
 
               <div class="doc-grid">
               <!-- Document slot 1: Identification -->
@@ -1078,7 +1172,7 @@
                     </svg>
                     <div>
                       <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
-                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
                   <input type="file" name="document_id" accept="application/pdf,.pdf" data-dz-input="document_id">
@@ -1087,24 +1181,16 @@
                 <div class="file-error" data-dz-error="document_id" style="display:none;"></div>
               </div>
 
-              <!-- Document slot 2: Employee Application (with template) -->
-              <div class="doc-slot" data-slot="document_application">
+              <!-- Document slot 2: Residencia -->
+              <div class="doc-slot" data-slot="document_residencia">
                 <div class="doc-slot-head">
                   <div class="doc-slot-num">2</div>
                   <div class="doc-slot-info">
-                    <div class="doc-slot-name" data-i18n="doc_application">Solicitud de Empleo</div>
-                    <div class="doc-slot-hint" data-i18n="doc_application_hint">Descarga la plantilla, complétala, fírmala y súbela en PDF.</div>
+                    <div class="doc-slot-name" data-i18n="doc_residencia">Residencia</div>
+                    <div class="doc-slot-hint" data-i18n="doc_residencia_hint">Tarjeta de Residente Permanente (Green Card) u otro comprobante de residencia legal.</div>
                   </div>
-                  <a class="doc-template-btn" href="assets/templates/Da-Silva-Employee-Application.pdf" target="_blank" rel="noopener" download>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                      <polyline points="7 10 12 15 17 10"></polyline>
-                      <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    <span data-i18n="btn_download_template">Descargar plantilla</span>
-                  </a>
                 </div>
-                <div class="dropzone" data-dz-target="document_application" tabindex="0" role="button" aria-label="Cargar solicitud de empleo">
+                <div class="dropzone" data-dz-target="document_residencia" tabindex="0" role="button" aria-label="Cargar residencia">
                   <div class="dz-row">
                     <svg class="dz-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -1113,33 +1199,25 @@
                     </svg>
                     <div>
                       <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
-                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
-                  <input type="file" name="document_application" accept="application/pdf,.pdf" data-dz-input="document_application">
+                  <input type="file" name="document_residencia" accept="application/pdf,.pdf" data-dz-input="document_residencia">
                 </div>
-                <div class="file-list" data-dz-list="document_application"></div>
-                <div class="file-error" data-dz-error="document_application" style="display:none;"></div>
+                <div class="file-list" data-dz-list="document_residencia"></div>
+                <div class="file-error" data-dz-error="document_residencia" style="display:none;"></div>
               </div>
 
-              <!-- Document slot 3: New Employee Package (with template) -->
-              <div class="doc-slot" data-slot="document_package">
+              <!-- Document slot 3: Social Security -->
+              <div class="doc-slot" data-slot="document_ssn">
                 <div class="doc-slot-head">
                   <div class="doc-slot-num">3</div>
                   <div class="doc-slot-info">
-                    <div class="doc-slot-name" data-i18n="doc_package">Paquete de Nuevo Empleado</div>
-                    <div class="doc-slot-hint" data-i18n="doc_package_hint">Descarga el paquete, complétalo y súbelo en PDF.</div>
+                    <div class="doc-slot-name" data-i18n="doc_ssn">Social Security</div>
+                    <div class="doc-slot-hint" data-i18n="doc_ssn_hint">Tarjeta de Seguro Social (Social Security Card).</div>
                   </div>
-                  <a class="doc-template-btn" href="assets/templates/Da-Silva-Paquete-Nuevo-Empleado.pdf" target="_blank" rel="noopener" download>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                      <polyline points="7 10 12 15 17 10"></polyline>
-                      <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    <span data-i18n="btn_download_template">Descargar plantilla</span>
-                  </a>
                 </div>
-                <div class="dropzone" data-dz-target="document_package" tabindex="0" role="button" aria-label="Cargar paquete de nuevo empleado">
+                <div class="dropzone" data-dz-target="document_ssn" tabindex="0" role="button" aria-label="Cargar social security">
                   <div class="dz-row">
                     <svg class="dz-mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -1148,19 +1226,32 @@
                     </svg>
                     <div>
                       <div class="dz-mini-title" data-i18n="dz_mini_title">Arrastra el PDF o <strong>haz clic para seleccionar</strong></div>
-                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 10 MB</div>
+                      <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
-                  <input type="file" name="document_package" accept="application/pdf,.pdf" data-dz-input="document_package">
+                  <input type="file" name="document_ssn" accept="application/pdf,.pdf" data-dz-input="document_ssn">
                 </div>
-                <div class="file-list" data-dz-list="document_package"></div>
-                <div class="file-error" data-dz-error="document_package" style="display:none;"></div>
+                <div class="file-list" data-dz-list="document_ssn"></div>
+                <div class="file-error" data-dz-error="document_ssn" style="display:none;"></div>
               </div>
               </div>
             </div>
             <div class="actions">
               <button type="button" class="btn-secondary" data-prev data-i18n="btn_back">Atrás</button>
               <button type="button" class="btn-primary" data-next data-i18n="btn_continue">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Document upload confirmation modal (shared by the 3 slots above) -->
+          <div class="doc-confirm-overlay" id="docConfirmOverlay" style="display:none;">
+            <div class="doc-confirm-box">
+              <h3 data-i18n="doc_confirm_title">Confirma tu documento</h3>
+              <p id="docConfirmText"></p>
+              <div class="doc-confirm-file" id="docConfirmFileName"></div>
+              <div class="doc-confirm-actions">
+                <button type="button" class="btn-secondary" id="docConfirmCancel" data-i18n="btn_doc_cancel">Cancelar</button>
+                <button type="button" class="btn-primary" id="docConfirmAccept" data-i18n="btn_doc_confirm">Sí, subir este documento</button>
+              </div>
             </div>
           </div>
 
@@ -1317,15 +1408,21 @@
 
         doc_id: "Identificación",
         doc_id_hint: "ID emitido por el gobierno: licencia de conducir, pasaporte o ID estatal.",
-        doc_application: "Solicitud de Empleo",
-        doc_application_hint: "Descarga la plantilla, complétala, fírmala y súbela en PDF.",
-        doc_package: "Paquete de Nuevo Empleado",
-        doc_package_hint: "Descarga el paquete, complétalo y súbelo en PDF.",
+        doc_residencia: "Residencia",
+        doc_residencia_hint: "Tarjeta de Residente Permanente (Green Card) u otro comprobante de residencia legal.",
+        doc_ssn: "Social Security",
+        doc_ssn_hint: "Tarjeta de Seguro Social (Social Security Card).",
         btn_download_template: "Descargar plantilla",
         dz_mini_title: 'Arrastra el PDF o <strong>haz clic para seleccionar</strong>',
         dz_mini_hint: "Solo PDF · máximo 5 MB",
         err_file_type: "Solo se permiten archivos PDF.",
         err_file_size: "El archivo supera el tamaño máximo de 5 MB.",
+        doc_banner_title: "Sube cada documento por separado",
+        doc_banner_text: "No tomes una sola foto ni combines varios documentos en un mismo archivo. Cada casilla debe contener únicamente el documento que se indica.",
+        doc_confirm_title: "Confirma tu documento",
+        doc_confirm_text: "Estás subiendo este archivo como tu documento de {doc}. Confirma que el archivo corresponde ÚNICAMENTE a este documento y no incluye ningún otro documento junto.",
+        btn_doc_cancel: "Cancelar",
+        btn_doc_confirm: "Sí, subir este documento",
 
         lbl_first_name: 'Nombres <span class="req">*</span>',
         lbl_last_name: 'Apellidos <span class="req">*</span>',
@@ -1445,15 +1542,21 @@
 
         doc_id: "Identification",
         doc_id_hint: "Government-issued ID: driver's license, passport or state ID.",
-        doc_application: "Employee Application",
-        doc_application_hint: "Download the template, fill it out, sign it and upload as PDF.",
-        doc_package: "New Employee Package",
-        doc_package_hint: "Download the package, complete it and upload as PDF.",
+        doc_residencia: "Residency",
+        doc_residencia_hint: "Permanent Resident Card (Green Card) or other proof of legal residency.",
+        doc_ssn: "Social Security",
+        doc_ssn_hint: "Social Security Card.",
         btn_download_template: "Download template",
         dz_mini_title: 'Drag the PDF or <strong>click to select</strong>',
         dz_mini_hint: "PDF only · max 5 MB",
         err_file_type: "Only PDF files are allowed.",
         err_file_size: "The file exceeds the 5 MB max size.",
+        doc_banner_title: "Upload each document separately",
+        doc_banner_text: "Don't take a single photo or combine several documents into one file. Each box must contain only the document indicated.",
+        doc_confirm_title: "Confirm your document",
+        doc_confirm_text: "You're uploading this file as your {doc} document. Confirm that the file contains ONLY this document and no other document together with it.",
+        btn_doc_cancel: "Cancel",
+        btn_doc_confirm: "Yes, upload this document",
 
         lbl_first_name: 'First Name <span class="req">*</span>',
         lbl_last_name: 'Last Name <span class="req">*</span>',
@@ -1943,8 +2046,8 @@
     })();
 
     // ============================================================
-    // Documentos: 3 slots independientes (ID, Solicitud, Paquete)
-    // Cada slot acepta 1 PDF (máx 10 MB) con drag & drop
+    // Documentos: 3 slots independientes (ID, Residencia, Social Security)
+    // Cada slot acepta 1 PDF (máx 5 MB) con drag & drop, con confirmación previa
     // ============================================================
     (function () {
       const MAX_SIZE = 5 * 1024 * 1024; // 5 MB (límite del webhook de Make.com)
@@ -1959,6 +2062,39 @@
         if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
         return (b / 1024 / 1024).toFixed(2) + ' MB';
       }
+
+      // ---- Modal de confirmación, compartido por los 3 slots ----
+      const confirmOverlay = document.getElementById('docConfirmOverlay');
+      const confirmTextEl = document.getElementById('docConfirmText');
+      const confirmFileEl = document.getElementById('docConfirmFileName');
+      const confirmAcceptBtn = document.getElementById('docConfirmAccept');
+      const confirmCancelBtn = document.getElementById('docConfirmCancel');
+      let confirmResolver = null;
+
+      function closeDocConfirm(result) {
+        if (!confirmOverlay) return;
+        confirmOverlay.style.display = 'none';
+        if (confirmResolver) { confirmResolver(result); confirmResolver = null; }
+      }
+
+      function askDocConfirm(label, fileName) {
+        if (!confirmOverlay) return Promise.resolve(true);
+        return new Promise(resolve => {
+          confirmResolver = resolve;
+          confirmTextEl.innerHTML = t('doc_confirm_text').replace('{doc}', `<strong>${label}</strong>`);
+          confirmFileEl.textContent = fileName;
+          confirmOverlay.style.display = 'flex';
+        });
+      }
+
+      if (confirmAcceptBtn) confirmAcceptBtn.addEventListener('click', () => closeDocConfirm(true));
+      if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', () => closeDocConfirm(false));
+      if (confirmOverlay) {
+        confirmOverlay.addEventListener('click', e => { if (e.target === confirmOverlay) closeDocConfirm(false); });
+      }
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && confirmOverlay && confirmOverlay.style.display !== 'none') closeDocConfirm(false);
+      });
 
       function setupSlot(dropzone) {
         const slotName = dropzone.getAttribute('data-dz-target');
@@ -2010,10 +2146,17 @@
           list.appendChild(item);
         }
 
-        function setFile(file) {
+        async function setFile(file) {
           const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
-          if (!isPdf) { showError('err_file_type'); return; }
-          if (file.size > MAX_SIZE) { showError('err_file_size'); return; }
+          if (!isPdf) { showError('err_file_type'); input.value = ''; return; }
+          if (file.size > MAX_SIZE) { showError('err_file_size'); input.value = ''; return; }
+
+          const slotEl = dropzone.closest('.doc-slot');
+          const labelEl = slotEl && slotEl.querySelector('.doc-slot-name');
+          const label = labelEl ? labelEl.textContent.trim() : slotName;
+          const ok = await askDocConfirm(label, file.name);
+          if (!ok) { input.value = ''; return; }
+
           current = file;
           syncInputFiles();
           renderList();
