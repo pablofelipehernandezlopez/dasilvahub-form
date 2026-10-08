@@ -724,6 +724,12 @@
       gap: 10px;
       justify-content: flex-end;
     }
+    .doc-error-box h3 { color: var(--orange-deep); }
+    .doc-error-box .doc-confirm-actions { justify-content: center; }
+    .doc-slot.doc-slot-error {
+      border-color: var(--orange-deep);
+      box-shadow: 0 0 0 2px rgba(237,137,54,0.25);
+    }
 
     /* ---------- Rejection screen ---------- */
     .reject-screen {
@@ -1175,7 +1181,7 @@
                       <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
-                  <input type="file" name="document_id" accept="application/pdf,.pdf" data-dz-input="document_id">
+                  <input type="file" name="document_id" accept="application/pdf,.pdf" data-dz-input="document_id" required>
                 </div>
                 <div class="file-list" data-dz-list="document_id"></div>
                 <div class="file-error" data-dz-error="document_id" style="display:none;"></div>
@@ -1202,7 +1208,7 @@
                       <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
-                  <input type="file" name="document_residencia" accept="application/pdf,.pdf" data-dz-input="document_residencia">
+                  <input type="file" name="document_residencia" accept="application/pdf,.pdf" data-dz-input="document_residencia" required>
                 </div>
                 <div class="file-list" data-dz-list="document_residencia"></div>
                 <div class="file-error" data-dz-error="document_residencia" style="display:none;"></div>
@@ -1229,7 +1235,7 @@
                       <div class="dz-mini-hint" data-i18n="dz_mini_hint">Solo PDF · máximo 5 MB</div>
                     </div>
                   </div>
-                  <input type="file" name="document_ssn" accept="application/pdf,.pdf" data-dz-input="document_ssn">
+                  <input type="file" name="document_ssn" accept="application/pdf,.pdf" data-dz-input="document_ssn" required>
                 </div>
                 <div class="file-list" data-dz-list="document_ssn"></div>
                 <div class="file-error" data-dz-error="document_ssn" style="display:none;"></div>
@@ -1251,6 +1257,17 @@
               <div class="doc-confirm-actions">
                 <button type="button" class="btn-secondary" id="docConfirmCancel" data-i18n="btn_doc_cancel">Cancelar</button>
                 <button type="button" class="btn-primary" id="docConfirmAccept" data-i18n="btn_doc_confirm">Sí, subir este documento</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document upload error modal (missing docs / duplicate file across sections) -->
+          <div class="doc-confirm-overlay" id="docErrorOverlay" style="display:none;">
+            <div class="doc-confirm-box doc-error-box">
+              <h3 id="docErrorTitle">Documento no válido</h3>
+              <p id="docErrorText"></p>
+              <div class="doc-confirm-actions">
+                <button type="button" class="btn-primary" id="docErrorOk" data-i18n="btn_doc_error_ok">Entendido</button>
               </div>
             </div>
           </div>
@@ -1423,6 +1440,11 @@
         doc_confirm_text: "Estás subiendo este archivo como tu documento de {doc}. Confirma que el archivo corresponde ÚNICAMENTE a este documento y no incluye ningún otro documento junto.",
         btn_doc_cancel: "Cancelar",
         btn_doc_confirm: "Sí, subir este documento",
+        btn_doc_error_ok: "Entendido",
+        err_doc_duplicate_title: "Documento repetido",
+        err_doc_duplicate_text: "Este archivo ya lo usaste en la sección «{other}». Debes subir un documento diferente para cada sección — no repitas el mismo archivo.",
+        err_docs_required_title: "Faltan documentos",
+        err_docs_required_text: "Debes subir los 3 documentos (Identificación, Residencia y Social Security) antes de continuar. Cada sección debe tener un archivo distinto.",
 
         lbl_first_name: 'Nombres <span class="req">*</span>',
         lbl_last_name: 'Apellidos <span class="req">*</span>',
@@ -1557,6 +1579,11 @@
         doc_confirm_text: "You're uploading this file as your {doc} document. Confirm that the file contains ONLY this document and no other document together with it.",
         btn_doc_cancel: "Cancel",
         btn_doc_confirm: "Yes, upload this document",
+        btn_doc_error_ok: "Got it",
+        err_doc_duplicate_title: "Duplicate document",
+        err_doc_duplicate_text: "This file was already used for the «{other}» section. You must upload a different document for each section — don't reuse the same file.",
+        err_docs_required_title: "Missing documents",
+        err_docs_required_text: "You must upload all 3 documents (Identification, Residency and Social Security) before continuing. Each section needs a different file.",
 
         lbl_first_name: 'First Name <span class="req">*</span>',
         lbl_last_name: 'Last Name <span class="req">*</span>',
@@ -1803,8 +1830,8 @@
           if (!validateField(field) && !firstInvalid) firstInvalid = field;
         });
 
-        // Required clásico (vacíos)
-        const required = panel.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]), select[required], textarea[required]');
+        // Required clásico (vacíos) — los campos de archivo se validan aparte abajo
+        const required = panel.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]):not([type="file"]), select[required], textarea[required]');
         for (const el of required) {
           if (!el.value) {
             if (!firstInvalid) firstInvalid = el.closest('.field') || el;
@@ -1814,6 +1841,24 @@
               el.removeEventListener('input', fix);
             });
           }
+        }
+
+        // Documentos obligatorios (paso 6): resalta las casillas vacías y muestra el modal de error
+        const requiredFiles = panel.querySelectorAll('input[type="file"][required]');
+        let missingDoc = false;
+        for (const el of requiredFiles) {
+          const slot = el.closest('.doc-slot');
+          if (!el.value) {
+            missingDoc = true;
+            if (!firstInvalid) firstInvalid = slot || el;
+            if (slot) {
+              slot.classList.add('doc-slot-error');
+              setTimeout(() => slot.classList.remove('doc-slot-error'), 2500);
+            }
+          }
+        }
+        if (missingDoc && typeof window.showDocsRequiredError === 'function') {
+          window.showDocsRequiredError();
         }
 
         const radioGroups = new Set();
@@ -2096,12 +2141,66 @@
         if (e.key === 'Escape' && confirmOverlay && confirmOverlay.style.display !== 'none') closeDocConfirm(false);
       });
 
+      // ---- Modal de error (falta documento / documento repetido), un solo botón ----
+      const errorOverlay = document.getElementById('docErrorOverlay');
+      const errorTitleEl = document.getElementById('docErrorTitle');
+      const errorTextEl = document.getElementById('docErrorText');
+      const errorOkBtn = document.getElementById('docErrorOk');
+
+      function showDocError(titleKey, textKey, replacements) {
+        if (!errorOverlay) return;
+        errorTitleEl.textContent = t(titleKey);
+        let msg = t(textKey);
+        if (replacements) {
+          Object.keys(replacements).forEach(k => { msg = msg.replace(`{${k}}`, replacements[k]); });
+        }
+        errorTextEl.innerHTML = msg;
+        errorOverlay.style.display = 'flex';
+      }
+
+      function closeDocError() {
+        if (errorOverlay) errorOverlay.style.display = 'none';
+      }
+
+      if (errorOkBtn) errorOkBtn.addEventListener('click', closeDocError);
+      if (errorOverlay) {
+        errorOverlay.addEventListener('click', e => { if (e.target === errorOverlay) closeDocError(); });
+      }
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && errorOverlay && errorOverlay.style.display !== 'none') closeDocError();
+      });
+
+      // ---- Estado compartido entre los 3 slots: para detectar el mismo archivo repetido ----
+      const slotFiles = {};  // slotName -> { name, size }
+      const slotLabels = {}; // slotName -> etiqueta visible ("Identificación", "Residencia", ...)
+
+      function findDuplicateSlot(slotName, file) {
+        for (const other in slotFiles) {
+          if (other === slotName) continue;
+          const f = slotFiles[other];
+          if (f && f.name === file.name && f.size === file.size) return other;
+        }
+        return null;
+      }
+
+      // Expuesto para que validateStep() (fuera de esta IIFE) pueda bloquear el avance
+      window.docsAllPresent = function () {
+        return !!(slotFiles.document_id && slotFiles.document_residencia && slotFiles.document_ssn);
+      };
+      window.showDocsRequiredError = function () {
+        showDocError('err_docs_required_title', 'err_docs_required_text');
+      };
+
       function setupSlot(dropzone) {
         const slotName = dropzone.getAttribute('data-dz-target');
         const input = document.querySelector(`[data-dz-input="${slotName}"]`);
         const list = document.querySelector(`[data-dz-list="${slotName}"]`);
         const errorEl = document.querySelector(`[data-dz-error="${slotName}"]`);
         if (!input || !list || !errorEl) return;
+
+        const slotEl = dropzone.closest('.doc-slot');
+        const labelEl = slotEl && slotEl.querySelector('.doc-slot-name');
+        slotLabels[slotName] = labelEl ? labelEl.textContent.trim() : slotName;
 
         let current = null; // un único archivo por slot
 
@@ -2140,6 +2239,7 @@
           item.querySelector('.file-size').textContent = fmtSize(current.size);
           item.querySelector('.file-remove').addEventListener('click', () => {
             current = null;
+            delete slotFiles[slotName];
             syncInputFiles();
             renderList();
           });
@@ -2151,13 +2251,20 @@
           if (!isPdf) { showError('err_file_type'); input.value = ''; return; }
           if (file.size > MAX_SIZE) { showError('err_file_size'); input.value = ''; return; }
 
-          const slotEl = dropzone.closest('.doc-slot');
-          const labelEl = slotEl && slotEl.querySelector('.doc-slot-name');
-          const label = labelEl ? labelEl.textContent.trim() : slotName;
+          const dupSlot = findDuplicateSlot(slotName, file);
+          if (dupSlot) {
+            showDocError('err_doc_duplicate_title', 'err_doc_duplicate_text', { other: slotLabels[dupSlot] || dupSlot });
+            input.value = '';
+            return;
+          }
+
+          const label = slotLabels[slotName] || slotName;
           const ok = await askDocConfirm(label, file.name);
           if (!ok) { input.value = ''; return; }
 
           current = file;
+          slotFiles[slotName] = { name: file.name, size: file.size };
+          if (slotEl) slotEl.classList.remove('doc-slot-error');
           syncInputFiles();
           renderList();
         }
