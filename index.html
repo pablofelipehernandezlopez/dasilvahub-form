@@ -1013,15 +1013,6 @@
               </div>
 
               <div class="field">
-                <label for="00Na500001oUa3x" data-i18n="lbl_position">Puesto solicitado <span class="req">*</span></label>
-                <select id="00Na500001oUa3x" name="00Na500001oUa3x">
-                  <option value="" data-i18n="opt_select_position">— Selecciona un puesto —</option>
-                  <option value="01ta500000C9naTAAR">Customer Service Agent · JOB-2026-Q2-001</option>
-                  <option value="01ta500000C9nc5AAB">Automotive Technician · JOB-2026-Q2-002</option>
-                </select>
-              </div>
-
-              <div class="field">
                 <label data-i18n="lbl_availability">Disponibilidad <span class="req">*</span></label>
                 <div class="chips">
                   <label class="chip"><input type="radio" name="availability" value="Tiempo completo"><span data-i18n="opt_full_time">Tiempo completo</span></label>
@@ -1458,7 +1449,6 @@
         lbl_zip: 'ZIP Code <span class="req">*</span>',
 
         lbl_current_occupation: "Ocupación actual",
-        lbl_position: 'Puesto solicitado <span class="req">*</span>',
         lbl_availability: 'Disponibilidad <span class="req">*</span>',
 
         lbl_us_work: '¿Autorizado para trabajar en EE.UU.? <span class="req">*</span>',
@@ -1505,7 +1495,6 @@
         opt_basic: "Básico",
         opt_intermediate: "Intermedio",
         opt_advanced: "Avanzado",
-        opt_select_position: "— Selecciona un puesto —",
         opt_select_state: "— Selecciona un estado —",
         opt_select_city: "— Selecciona una ciudad —",
         opt_select_city_first: "— Selecciona primero un estado —",
@@ -1597,7 +1586,6 @@
         lbl_zip: 'ZIP Code <span class="req">*</span>',
 
         lbl_current_occupation: "Current occupation",
-        lbl_position: 'Position applying for <span class="req">*</span>',
         lbl_availability: 'Availability <span class="req">*</span>',
 
         lbl_us_work: 'Authorized to work in the U.S.? <span class="req">*</span>',
@@ -1644,7 +1632,6 @@
         opt_basic: "Basic",
         opt_intermediate: "Intermediate",
         opt_advanced: "Advanced",
-        opt_select_position: "— Select a position —",
         opt_select_state: "— Select a state —",
         opt_select_city: "— Select a city —",
         opt_select_city_first: "— Select a state first —",
@@ -1955,12 +1942,6 @@
           fd.delete('other_languages');
           if (langs.length) {
             fd.set('other_languages', Array.from(langs).map(c => c.value).join(', '));
-          }
-
-          // Etiquetas legibles (el ID de Salesforce queda igual; añadimos el nombre del puesto)
-          const posSel = document.getElementById('00Na500001oUa3x');
-          if (posSel && posSel.selectedIndex > 0) {
-            fd.set('position_label', posSel.options[posSel.selectedIndex].text);
           }
 
           // Metadata
